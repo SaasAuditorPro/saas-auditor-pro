@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { marked } from "marked";
 
 const PLACEHOLDER = `Slack - £12/month
 Notion - £16/month
@@ -21,147 +22,77 @@ export default function AuditPage() {
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState("");
   const [error, setError] = useState("");
-  const [used, setUsed] = useState(false);
 
   const runAudit = async () => {
-    if (!subscriptions.trim()) {
-      setError("Please paste your subscriptions first.");
-      return;
-    }
-    setError("");
-    setLoading(true);
-    setReport("");
-
+    if (!subscriptions.trim()) { setError("Please paste your subscriptions first."); return; }
+    setError(""); setLoading(true); setReport("");
     try {
-      const res = await fetch("/api/audit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subscriptions, email }),
-      });
+      const res = await fetch("/api/audit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ subscriptions, email }) });
       const data = await res.json();
-      if (data.error) {
-        setError(data.error);
-      } else {
-        setReport(data.report);
-        setUsed(true);
-      }
-    } catch {
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+      if (data.error) setError(data.error);
+      else setReport(data.report);
+    } catch { setError("Something went wrong. Please try again."); }
+    finally { setLoading(false); }
   };
 
+  const renderedReport = report ? marked(report) as string : "";
+
   return (
-    <main className="min-h-screen grid-bg">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
-
-      <nav className="flex items-center justify-between px-8 py-6 max-w-5xl mx-auto">
-        <Link href="/" className="font-syne font-bold text-lg tracking-tight">
-          <span className="text-emerald-400">SaaS</span>
-          <span className="text-white">Auditor</span>
-          <span className="text-zinc-500">Pro</span>
+    <main style={{ minHeight: "100vh", background: "#080c10" }}>
+      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 40px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <Link href="/" style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "20px", textDecoration: "none", letterSpacing: "-0.5px" }}>
+          <span style={{ color: "#34d399" }}>SaaS</span><span style={{ color: "#fff" }}>Auditor</span><span style={{ color: "#4b5563" }}>Pro</span>
         </Link>
-        <Link href="/checkout" className="text-xs bg-emerald-400/10 border border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/20 transition-colors px-4 py-2 rounded-lg font-dm">
-          Upgrade to Pro →
-        </Link>
+        <Link href="/checkout" style={{ fontSize: "13px", background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.3)", color: "#34d399", padding: "8px 16px", borderRadius: "8px", textDecoration: "none", fontFamily: "DM Sans, sans-serif" }}>Upgrade to Pro →</Link>
       </nav>
-
-      <div className="max-w-3xl mx-auto px-8 py-12">
+      <div style={{ maxWidth: "760px", margin: "0 auto", padding: "48px 32px" }}>
         {!report ? (
           <>
-            <div className="mb-10">
-              <h1 className="font-syne font-extrabold text-4xl text-white mb-3">
-                Run Your Audit
-              </h1>
-              <p className="font-dm text-zinc-400">
-                List your subscriptions below — one per line with the monthly cost.
-              </p>
+            <h1 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "42px", color: "#fff", marginBottom: "8px", letterSpacing: "-1px" }}>Run Your Audit</h1>
+            <p style={{ fontFamily: "DM Sans, sans-serif", color: "#6b7280", marginBottom: "40px", fontSize: "16px" }}>List your subscriptions below — one per line with the monthly cost.</p>
+            <div style={{ marginBottom: "20px" }}>
+              <label style={{ fontFamily: "DM Sans, sans-serif", fontSize: "13px", color: "#9ca3af", display: "block", marginBottom: "8px" }}>Your subscriptions <span style={{ color: "#4b5563" }}>(one per line, include cost)</span></label>
+              <textarea value={subscriptions} onChange={(e) => setSubscriptions(e.target.value)} placeholder={PLACEHOLDER} rows={13} style={{ width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", padding: "16px", fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: "#d1d5db", outline: "none", resize: "none", boxSizing: "border-box", lineHeight: "1.7" }} />
             </div>
-
-            <div className="space-y-6">
-              <div>
-                <label className="font-dm text-sm text-zinc-400 block mb-2">
-                  Your subscriptions <span className="text-zinc-600">(one per line, include cost)</span>
-                </label>
-                <textarea
-                  value={subscriptions}
-                  onChange={(e) => setSubscriptions(e.target.value)}
-                  placeholder={PLACEHOLDER}
-                  rows={12}
-                  className="w-full bg-white/4 border border-white/10 focus:border-emerald-500/50 rounded-xl p-4 font-dm text-sm text-zinc-300 placeholder:text-zinc-700 outline-none resize-none transition-colors"
-                />
-              </div>
-
-              <div>
-                <label className="font-dm text-sm text-zinc-400 block mb-2">
-                  Your email <span className="text-zinc-600">(to save your report)</span>
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="joey@example.com"
-                  className="w-full bg-white/4 border border-white/10 focus:border-emerald-500/50 rounded-xl p-4 font-dm text-sm text-zinc-300 placeholder:text-zinc-700 outline-none transition-colors"
-                />
-              </div>
-
-              {error && (
-                <p className="text-red-400 text-sm font-dm bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3">
-                  {error}
-                </p>
-              )}
-
-              <button
-                onClick={runAudit}
-                disabled={loading}
-                className="w-full bg-emerald-400 hover:bg-emerald-300 disabled:opacity-50 disabled:cursor-not-allowed text-black font-syne font-bold py-4 rounded-xl transition-all glow text-base"
-              >
-                {loading ? "Analysing your stack..." : "Run My Audit →"}
-              </button>
-
-              {loading && (
-                <div className="text-center">
-                  <div className="inline-flex items-center gap-2 text-zinc-500 font-dm text-sm">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                    AI is reviewing your subscriptions...
-                  </div>
-                </div>
-              )}
+            <div style={{ marginBottom: "24px" }}>
+              <label style={{ fontFamily: "DM Sans, sans-serif", fontSize: "13px", color: "#9ca3af", display: "block", marginBottom: "8px" }}>Your email <span style={{ color: "#4b5563" }}>(optional)</span></label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" style={{ width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", padding: "14px 16px", fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: "#d1d5db", outline: "none", boxSizing: "border-box" }} />
             </div>
+            {error && <p style={{ color: "#f87171", fontSize: "14px", background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.2)", borderRadius: "8px", padding: "12px 16px", marginBottom: "16px", fontFamily: "DM Sans, sans-serif" }}>{error}</p>}
+            <button onClick={runAudit} disabled={loading} style={{ width: "100%", background: loading ? "#1f2937" : "#34d399", color: loading ? "#6b7280" : "#000", fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "16px", padding: "16px", borderRadius: "12px", border: "none", cursor: loading ? "not-allowed" : "pointer", boxShadow: loading ? "none" : "0 0 40px rgba(52,211,153,0.25)", transition: "all 0.2s" }}>
+              {loading ? "⏳ Analysing your stack..." : "Run My Audit →"}
+            </button>
           </>
         ) : (
           <>
-            <div className="mb-8 flex items-center justify-between">
-              <h1 className="font-syne font-extrabold text-3xl text-white">
-                Your Savings Report
-              </h1>
-              <button
-                onClick={() => { setReport(""); setSubscriptions(""); setUsed(false); }}
-                className="text-xs text-zinc-500 hover:text-zinc-300 font-dm transition-colors"
-              >
-                ← Run another
-              </button>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "32px" }}>
+              <h1 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "36px", color: "#fff", letterSpacing: "-1px" }}>Your Savings Report</h1>
+              <button onClick={() => { setReport(""); setSubscriptions(""); }} style={{ fontSize: "13px", color: "#6b7280", background: "none", border: "none", cursor: "pointer", fontFamily: "DM Sans, sans-serif" }}>← Run another</button>
             </div>
-
-            <div className="bg-white/3 border border-emerald-500/20 rounded-2xl p-8 mb-8">
-              <pre className="font-dm text-sm text-zinc-300 whitespace-pre-wrap leading-relaxed">
-                {report}
-              </pre>
+            <div className="report-content" dangerouslySetInnerHTML={{ __html: renderedReport }} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(52,211,153,0.2)", borderRadius: "16px", padding: "40px", marginBottom: "32px" }} />
+            <div style={{ background: "rgba(52,211,153,0.07)", border: "1px solid rgba(52,211,153,0.2)", borderRadius: "12px", padding: "24px", textAlign: "center" }}>
+              <p style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, color: "#fff", marginBottom: "6px", fontSize: "18px" }}>Want unlimited audits?</p>
+              <p style={{ fontFamily: "DM Sans, sans-serif", color: "#6b7280", fontSize: "14px", marginBottom: "16px" }}>Upgrade to Pro for £19/month — unlimited audits, renewal reminders, and more.</p>
+              <Link href="/checkout" style={{ display: "inline-block", background: "#34d399", color: "#000", fontFamily: "Syne, sans-serif", fontWeight: 700, padding: "12px 24px", borderRadius: "8px", textDecoration: "none", fontSize: "14px" }}>Upgrade to Pro →</Link>
             </div>
-
-            {used && (
-              <div className="bg-emerald-500/8 border border-emerald-500/25 rounded-xl p-6 text-center">
-                <p className="font-syne font-bold text-white mb-1">Want to run unlimited audits?</p>
-                <p className="font-dm text-zinc-400 text-sm mb-4">Upgrade to Pro for £19/month — unlimited audits, renewal reminders, and more.</p>
-                <Link href="/checkout" className="inline-block bg-emerald-400 hover:bg-emerald-300 text-black font-syne font-bold px-6 py-3 rounded-lg transition-all glow text-sm">
-                  Upgrade to Pro →
-                </Link>
-              </div>
-            )}
           </>
         )}
       </div>
+      <style>{`
+        .report-content { color: #d1d5db; font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.8; }
+        .report-content h1, .report-content h2, .report-content h3 { font-family: 'Syne', sans-serif; color: #f9fafb; margin: 28px 0 12px; letter-spacing: -0.5px; }
+        .report-content h2 { font-size: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; }
+        .report-content h3 { font-size: 17px; color: #34d399; }
+        .report-content p { margin: 10px 0; }
+        .report-content strong { color: #f9fafb; font-weight: 600; }
+        .report-content ul, .report-content ol { padding-left: 20px; margin: 10px 0; }
+        .report-content li { margin: 6px 0; }
+        .report-content table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+        .report-content th { background: rgba(52,211,153,0.1); color: #34d399; padding: 10px 14px; text-align: left; font-family: 'Syne', sans-serif; font-weight: 600; border: 1px solid rgba(52,211,153,0.2); }
+        .report-content td { padding: 10px 14px; border: 1px solid rgba(255,255,255,0.06); color: #d1d5db; }
+        .report-content tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+        .report-content hr { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 24px 0; }
+      `}</style>
     </main>
   );
 }
