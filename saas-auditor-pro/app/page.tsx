@@ -58,7 +58,7 @@ export default function Home() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "28px" }}>
           {[
             { step: "01", title: "Paste your subscriptions", desc: "List your tools and monthly costs. One line each. Takes 2 minutes." },
-            { step: "02", title: "AI analyses everything", desc: "Claude identifies waste, overlaps, and cheaper alternatives instantly." },
+            { step: "02", title: "AI analyses everything", desc: "Our AI identifies waste, overlaps, and cheaper alternatives instantly." },
             { step: "03", title: "Get your savings report", desc: "A ranked list of cuts with exact savings and what to switch to." },
           ].map((item) => (
             <div key={item.step}>
