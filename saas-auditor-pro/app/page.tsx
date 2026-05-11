@@ -32,9 +32,9 @@ export default function Home() {
 
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
           <Link href="/audit" style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "#34d399", color: "#000", fontFamily: "Syne, sans-serif", fontWeight: 700, padding: "16px 32px", borderRadius: "12px", fontSize: "16px", textDecoration: "none", boxShadow: "0 0 50px rgba(52,211,153,0.3)", width: "fit-content" }}>
-            Run My Free Audit →
+            Free Snapshot →
           </Link>
-          <span style={{ fontFamily: "DM Sans, sans-serif", color: "#374151", fontSize: "13px" }}>No account needed · Free first audit</span>
+          <span style={{ fontFamily: "DM Sans, sans-serif", color: "#374151", fontSize: "13px" }}>No account needed</span>
         </div>
       </section>
 
