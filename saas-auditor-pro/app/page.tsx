@@ -78,8 +78,7 @@ export default function Home() {
             <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, color: "#e5e7eb", marginBottom: "4px" }}>Free</div>
             <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "36px", color: "#fff", marginBottom: "20px", letterSpacing: "-1px" }}>£0</div>
             <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px", fontFamily: "DM Sans, sans-serif", fontSize: "14px" }}>
-              <li style={{ color: "#6b7280", padding: "5px 0" }}><span style={{ color: "#34d399", marginRight: "8px" }}>✓</span>1 full audit report</li>
-              <li style={{ color: "#6b7280", padding: "5px 0" }}><span style={{ color: "#34d399", marginRight: "8px" }}>✓</span>AI savings analysis</li>
+              <li style={{ color: "#6b7280", padding: "5px 0" }}><span style={{ color: "#34d399", marginRight: "8px" }}>✓</span>1 free savings snapshot</li>
               <li style={{ color: "#374151", padding: "5px 0" }}><span style={{ marginRight: "8px" }}>✗</span>Unlimited audits</li>
               <li style={{ color: "#374151", padding: "5px 0" }}><span style={{ marginRight: "8px" }}>✗</span>Renewal reminders</li>
             </ul>
