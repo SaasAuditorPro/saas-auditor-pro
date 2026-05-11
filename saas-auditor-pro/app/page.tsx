@@ -1,152 +1,98 @@
 "use client";
-import { useState } from "react";
 import Link from "next/link";
 
 export default function Home() {
-  const [hovering, setHovering] = useState(false);
-
   return (
-    <main className="min-h-screen grid-bg relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
-
-      {/* Nav */}
-      <nav className="flex items-center justify-between px-8 py-6 max-w-6xl mx-auto">
-        <div className="font-syne font-bold text-lg tracking-tight">
-          <span className="text-emerald-400">SaaS</span>
-          <span className="text-white">Auditor</span>
-          <span className="text-zinc-500">Pro</span>
+    <main style={{ minHeight: "100vh", background: "#080c10", backgroundImage: "linear-gradient(rgba(52,211,153,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(52,211,153,0.03) 1px, transparent 1px)", backgroundSize: "60px 60px" }}>
+      <div style={{ position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", width: "600px", height: "300px", background: "radial-gradient(ellipse, rgba(52,211,153,0.08) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 48px", maxWidth: "1100px", margin: "0 auto" }}>
+        <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "20px", letterSpacing: "-0.5px" }}>
+          <span style={{ color: "#34d399" }}>SaaS</span>
+          <span style={{ color: "#fff" }}>Auditor</span>
+          <span style={{ color: "#4b5563" }}>Pro</span>
         </div>
-        <Link
-          href="/audit"
-          className="text-sm text-zinc-400 hover:text-emerald-400 transition-colors font-dm"
-        >
-          Run Audit →
-        </Link>
+        <Link href="/audit" style={{ fontSize: "13px", color: "#6b7280", textDecoration: "none", fontFamily: "DM Sans, sans-serif" }}>Run Audit →</Link>
       </nav>
-
-      {/* Hero */}
-      <section className="max-w-5xl mx-auto px-8 pt-16 pb-24 text-center">
-        <div className="fade-up fade-up-1 inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-1.5 text-emerald-400 text-xs font-dm mb-8">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          AI-Powered Savings Reports
+      <section style={{ maxWidth: "900px", margin: "0 auto", padding: "80px 48px 60px", textAlign: "center" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "rgba(52,211,153,0.08)", border: "1px solid rgba(52,211,153,0.2)", borderRadius: "100px", padding: "6px 16px", marginBottom: "32px" }}>
+          <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#34d399", display: "inline-block" }} />
+          <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: "12px", color: "#34d399", letterSpacing: "0.5px" }}>AI-Powered Savings Reports</span>
         </div>
-
-        <h1 className="fade-up fade-up-2 font-syne font-extrabold text-5xl md:text-7xl leading-[1.05] tracking-tight mb-6">
-          You&apos;re wasting money
-          <br />
-          <span className="text-emerald-400 glow-text">on software.</span>
+        <h1 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "clamp(44px, 7vw, 80px)", lineHeight: 1.05, letterSpacing: "-2px", color: "#fff", marginBottom: "24px" }}>
+          You&apos;re wasting money<br />
+          <span style={{ color: "#34d399", textShadow: "0 0 60px rgba(52,211,153,0.4)" }}>on software.</span>
         </h1>
-
-        <p className="fade-up fade-up-3 font-dm text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-          The average small business wastes <strong className="text-white">£8,000 per year</strong> on unused
-          or overlapping SaaS subscriptions. Paste your list. Get your savings
-          report in 30 seconds.
+        <p style={{ fontFamily: "DM Sans, sans-serif", color: "#6b7280", fontSize: "18px", maxWidth: "600px", margin: "0 auto 40px", lineHeight: 1.7 }}>
+          The average small business wastes <strong style={{ color: "#e5e7eb" }}>£8,000 per year</strong> on unused subscriptions. Paste your list. Get your savings report in 30 seconds.
         </p>
-
-        <div className="fade-up fade-up-4 flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <Link
-            href="/audit"
-            onMouseEnter={() => setHovering(true)}
-            onMouseLeave={() => setHovering(false)}
-            className="group relative inline-flex items-center gap-2 bg-emerald-400 hover:bg-emerald-300 text-black font-syne font-bold px-8 py-4 rounded-lg text-base transition-all duration-200 glow"
-          >
-            Run My Free Audit
-            <span className="group-hover:translate-x-1 transition-transform">→</span>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+          <Link href="/audit" style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "#34d399", color: "#000", fontFamily: "Syne, sans-serif", fontWeight: 700, padding: "16px 32px", borderRadius: "12px", fontSize: "16px", textDecoration: "none", boxShadow: "0 0 50px rgba(52,211,153,0.3)" }}>
+            Run My Free Audit →
           </Link>
-          <p className="text-zinc-600 text-sm font-dm">No account needed · Free first audit</p>
+          <span style={{ fontFamily: "DM Sans, sans-serif", color: "#374151", fontSize: "13px" }}>No account needed · Free first audit</span>
         </div>
       </section>
-
-      {/* Stats */}
-      <section className="max-w-5xl mx-auto px-8 pb-24">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <section style={{ maxWidth: "900px", margin: "0 auto", padding: "0 48px 80px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
           {[
             { stat: "51%", label: "of SaaS licenses go unused every month" },
             { stat: "£8K", label: "average SMB waste per year on software" },
-            { stat: "30s", label: "to get your full savings report" },
+            { stat: "30s", label: "to get your full AI savings report" },
           ].map((item) => (
-            <div
-              key={item.stat}
-              className="bg-white/3 border border-white/8 rounded-xl p-6 hover:border-emerald-500/30 transition-colors"
-            >
-              <div className="font-syne font-extrabold text-4xl text-emerald-400 mb-2">
-                {item.stat}
-              </div>
-              <div className="font-dm text-zinc-400 text-sm leading-relaxed">
-                {item.label}
-              </div>
+            <div key={item.stat} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", padding: "28px 24px" }}>
+              <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "44px", color: "#34d399", marginBottom: "8px", letterSpacing: "-1px" }}>{item.stat}</div>
+              <div style={{ fontFamily: "DM Sans, sans-serif", color: "#6b7280", fontSize: "14px", lineHeight: 1.6 }}>{item.label}</div>
             </div>
           ))}
         </div>
       </section>
-
-      {/* How it works */}
-      <section className="max-w-5xl mx-auto px-8 pb-24">
-        <h2 className="font-syne font-bold text-2xl text-center mb-12 text-zinc-300">
-          How it works
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section style={{ maxWidth: "900px", margin: "0 auto", padding: "0 48px 80px" }}>
+        <h2 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "24px", textAlign: "center", marginBottom: "48px", color: "#9ca3af" }}>How it works</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "32px" }}>
           {[
             { step: "01", title: "Paste your subscriptions", desc: "List your tools and monthly costs. One line each. Takes 2 minutes." },
             { step: "02", title: "AI analyses everything", desc: "Claude identifies waste, overlaps, and cheaper alternatives instantly." },
             { step: "03", title: "Get your savings report", desc: "A ranked list of cuts with exact savings and what to switch to." },
           ].map((item) => (
-            <div key={item.step} className="relative">
-              <div className="font-syne font-extrabold text-6xl text-white/4 mb-3">
-                {item.step}
-              </div>
-              <h3 className="font-syne font-bold text-lg text-white mb-2">{item.title}</h3>
-              <p className="font-dm text-zinc-500 text-sm leading-relaxed">{item.desc}</p>
+            <div key={item.step}>
+              <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "64px", color: "rgba(255,255,255,0.05)", marginBottom: "12px", lineHeight: 1 }}>{item.step}</div>
+              <h3 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "17px", color: "#f9fafb", marginBottom: "8px" }}>{item.title}</h3>
+              <p style={{ fontFamily: "DM Sans, sans-serif", color: "#6b7280", fontSize: "14px", lineHeight: 1.7 }}>{item.desc}</p>
             </div>
           ))}
         </div>
       </section>
-
-      {/* Pricing */}
-      <section className="max-w-5xl mx-auto px-8 pb-32">
-        <h2 className="font-syne font-bold text-2xl text-center mb-4 text-zinc-300">
-          Simple pricing
-        </h2>
-        <p className="text-center text-zinc-500 font-dm text-sm mb-12">Save £1,000s. Pay pennies.</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-          <div className="bg-white/3 border border-white/8 rounded-xl p-8">
-            <div className="font-syne font-bold text-lg text-white mb-1">Free</div>
-            <div className="font-syne font-extrabold text-4xl text-white mb-6">£0</div>
-            <ul className="space-y-3 font-dm text-sm text-zinc-400 mb-8">
-              <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> 1 full audit report</li>
-              <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> AI savings analysis</li>
-              <li className="flex items-center gap-2"><span className="text-zinc-600">✗</span> Unlimited audits</li>
-              <li className="flex items-center gap-2"><span className="text-zinc-600">✗</span> Renewal reminders</li>
+      <section style={{ maxWidth: "700px", margin: "0 auto", padding: "0 48px 80px" }}>
+        <h2 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "24px", textAlign: "center", marginBottom: "8px", color: "#9ca3af" }}>Simple pricing</h2>
+        <p style={{ textAlign: "center", color: "#4b5563", fontFamily: "DM Sans, sans-serif", fontSize: "14px", marginBottom: "40px" }}>Save £1,000s. Pay pennies.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "16px", padding: "32px" }}>
+            <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, color: "#e5e7eb", marginBottom: "4px" }}>Free</div>
+            <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "40px", color: "#fff", marginBottom: "24px", letterSpacing: "-1px" }}>£0</div>
+            <ul style={{ listStyle: "none", padding: 0, margin: "0 0 28px", fontFamily: "DM Sans, sans-serif", fontSize: "14px" }}>
+              <li style={{ color: "#6b7280", padding: "6px 0" }}><span style={{ color: "#34d399", marginRight: "8px" }}>✓</span>1 full audit report</li>
+              <li style={{ color: "#6b7280", padding: "6px 0" }}><span style={{ color: "#34d399", marginRight: "8px" }}>✓</span>AI savings analysis</li>
+              <li style={{ color: "#374151", padding: "6px 0" }}><span style={{ marginRight: "8px" }}>✗</span>Unlimited audits</li>
+              <li style={{ color: "#374151", padding: "6px 0" }}><span style={{ marginRight: "8px" }}>✗</span>Renewal reminders</li>
             </ul>
-            <Link href="/audit" className="block text-center border border-white/10 hover:border-emerald-500/40 text-zinc-300 hover:text-emerald-400 font-syne font-bold py-3 rounded-lg transition-all text-sm">
-              Start Free
-            </Link>
+            <Link href="/audit" style={{ display: "block", textAlign: "center", border: "1px solid rgba(255,255,255,0.1)", color: "#9ca3af", padding: "12px", borderRadius: "8px", textDecoration: "none", fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "14px" }}>Start Free</Link>
           </div>
-          <div className="bg-emerald-500/8 border border-emerald-500/30 rounded-xl p-8 relative">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-400 text-black text-xs font-syne font-bold px-3 py-1 rounded-full">
-              MOST POPULAR
-            </div>
-            <div className="font-syne font-bold text-lg text-white mb-1">Pro</div>
-            <div className="font-syne font-extrabold text-4xl text-emerald-400 mb-6">£19<span className="text-lg text-zinc-500">/mo</span></div>
-            <ul className="space-y-3 font-dm text-sm text-zinc-300 mb-8">
-              <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> Unlimited audits</li>
-              <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> AI savings analysis</li>
-              <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> Renewal reminders</li>
-              <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> Stack comparison tool</li>
+          <div style={{ position: "relative", background: "rgba(52,211,153,0.06)", border: "1px solid rgba(52,211,153,0.3)", borderRadius: "16px", padding: "32px" }}>
+            <div style={{ position: "absolute", top: "-13px", left: "50%", transform: "translateX(-50%)", background: "#34d399", color: "#000", fontSize: "11px", fontFamily: "Syne, sans-serif", fontWeight: 700, padding: "4px 12px", borderRadius: "100px", whiteSpace: "nowrap" }}>MOST POPULAR</div>
+            <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, color: "#e5e7eb", marginBottom: "4px" }}>Pro</div>
+            <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "40px", color: "#34d399", marginBottom: "24px", letterSpacing: "-1px" }}>£19<span style={{ fontSize: "16px", color: "#4b5563" }}>/mo</span></div>
+            <ul style={{ listStyle: "none", padding: 0, margin: "0 0 28px", fontFamily: "DM Sans, sans-serif", fontSize: "14px" }}>
+              <li style={{ color: "#d1d5db", padding: "6px 0" }}><span style={{ color: "#34d399", marginRight: "8px" }}>✓</span>Unlimited audits</li>
+              <li style={{ color: "#d1d5db", padding: "6px 0" }}><span style={{ color: "#34d399", marginRight: "8px" }}>✓</span>AI savings analysis</li>
+              <li style={{ color: "#d1d5db", padding: "6px 0" }}><span style={{ color: "#34d399", marginRight: "8px" }}>✓</span>Renewal reminders</li>
+              <li style={{ color: "#d1d5db", padding: "6px 0" }}><span style={{ color: "#34d399", marginRight: "8px" }}>✓</span>Stack comparison tool</li>
             </ul>
-            <Link href="/checkout" className="block text-center bg-emerald-400 hover:bg-emerald-300 text-black font-syne font-bold py-3 rounded-lg transition-all text-sm glow">
-              Get Pro — £19/mo
-            </Link>
+            <Link href="/checkout" style={{ display: "block", textAlign: "center", background: "#34d399", color: "#000", padding: "12px", borderRadius: "8px", textDecoration: "none", fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "14px", boxShadow: "0 0 30px rgba(52,211,153,0.2)" }}>Get Pro — £19/mo</Link>
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="border-t border-white/5 py-8">
-        <p className="text-center text-zinc-600 font-dm text-xs">
-          © 2026 SaaS Auditor Pro · Built to save you money
-        </p>
+      <footer style={{ borderTop: "1px solid rgba(255,255,255,0.05)", padding: "32px", textAlign: "center" }}>
+        <p style={{ fontFamily: "DM Sans, sans-serif", color: "#374151", fontSize: "12px" }}>© 2026 SaaS Auditor Pro · Built to save you money</p>
       </footer>
     </main>
   );
