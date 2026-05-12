@@ -11,12 +11,12 @@ const sections = {
   privacy: {
     title: "Privacy Policy",
     content: [
-      { h: "1. Who we are", b: `SaaS Auditor Pro is operated by Joey Payton, a sole trader registered in England and Wales. We provide an AI-powered software subscription audit tool for UK small businesses.\n\nContact: hello@saasauditorpro.com` },
+      { h: "1. Who we are", b: `SaaS Auditor Pro is operated by Joey Payton, a sole trader registered in England and Wales. We provide an AI-powered software subscription audit tool for UK small businesses.\n\nContact: saasauditorpro@gmail.com` },
       { h: "2. What data we collect", b: `We collect only the minimum data necessary:\n\n• Email address (optional — only if you choose to provide it)\n• Subscription list data you paste into the audit tool\n• Basic usage data via standard server logs\n• Payment information (handled entirely by Stripe — we never see your card details)\n\nWe do not collect bank account details or sensitive personal data.` },
       { h: "3. How we use your data", b: `We use your data solely to:\n\n• Provide the audit service you requested\n• Send your report to your email address (if provided)\n• Process your subscription payment via Stripe\n• Comply with legal obligations\n\nWe will never sell your data or share it with advertisers.` },
       { h: "4. Legal basis for processing", b: `Under UK GDPR:\n\n• Contract: to provide the service you requested\n• Legitimate interests: to improve our service and prevent fraud\n• Legal obligation: where required by law` },
       { h: "5. Third parties", b: `• Anthropic — AI processing of your subscription list\n• Stripe — payment processing\n• Vercel — website hosting\n\nWe do not share your data with any other third parties.` },
-      { h: "6. Your rights under UK GDPR", b: `You have the right to access, erase, rectify, port, and object to processing of your personal data. Email hello@saasauditorpro.com to exercise these rights. You may also complain to the ICO at ico.org.uk.` },
+      { h: "6. Your rights under UK GDPR", b: `You have the right to access, erase, rectify, port, and object to processing of your personal data. Email saasauditorpro@gmail.com to exercise these rights. You may also complain to the ICO at ico.org.uk.` },
       { h: "7. Data retention", b: `• Email addresses: deleted within 30 days of cancellation\n• Audit data: not stored — processed in real time only\n• Payment records: retained 7 years as required by UK tax law` },
     ]
   },
