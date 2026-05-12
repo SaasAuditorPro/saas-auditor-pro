@@ -43,9 +43,12 @@ export default function AuditPage() {
   const renderedReport = report ? marked(report) as string : "";
 
   const goToCheckout = async () => {
-    const res = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
-    const data = await res.json();
-    if (data.url) window.location.href = data.url;
+    try {
+      const res = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email || undefined }) });
+      const data = await res.json();
+      if (data.url) { window.location.href = data.url; }
+      else { window.location.href = "/checkout"; }
+    } catch { window.location.href = "/checkout"; }
   };
 
   return (
@@ -61,7 +64,7 @@ export default function AuditPage() {
         {!teaser && !report ? (
           <>
             <h1 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 6vw, 42px)", color: "#fff", marginBottom: "8px", letterSpacing: "-1px" }}>Run Your Audit</h1>
-            <p style={{ fontFamily: "DM Sans, sans-serif", color: "#6b7280", marginBottom: "32px", fontSize: "15px" }}>List your subscriptions below — one per line with the monthly cost.</p>
+            <p style={{ fontFamily: "DM Sans, sans-serif", color: "#6b7280", marginBottom: "32px", fontSize: "15px" }}>List your subscriptions below — one per line with the monthly cost. Not sure what you pay for? Check your bank or card statement for recurring charges and paste them below.</p>
             <div style={{ marginBottom: "16px" }}>
               <label style={{ fontFamily: "DM Sans, sans-serif", fontSize: "13px", color: "#9ca3af", display: "block", marginBottom: "8px" }}>Your subscriptions <span style={{ color: "#4b5563" }}>(one per line, include cost)</span></label>
               <textarea value={subscriptions} onChange={(e) => setSubscriptions(e.target.value)} placeholder={PLACEHOLDER} rows={12} style={{ width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", padding: "14px", fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: "#d1d5db", outline: "none", resize: "none", boxSizing: "border-box", lineHeight: "1.7" }} />
