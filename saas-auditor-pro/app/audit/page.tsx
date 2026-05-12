@@ -30,6 +30,7 @@ export default function AuditPage() {
     if (!subscriptions.trim()) { setError("Please paste your subscriptions first."); return; }
     setError(""); setLoading(true); setReport(""); setTeaser(null);
     try {
+      if (email) { fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) }).catch(() => {}); }
       const res = await fetch("/api/audit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ subscriptions, email, isPro }) });
       const data = await res.json();
       if (data.error) setError(data.error);
