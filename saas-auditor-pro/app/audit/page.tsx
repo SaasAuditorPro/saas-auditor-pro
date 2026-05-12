@@ -42,6 +42,12 @@ export default function AuditPage() {
 
   const renderedReport = report ? marked(report) as string : "";
 
+  const goToCheckout = async () => {
+    const res = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+  };
+
   return (
     <main style={{ minHeight: "100vh", background: "#080c10" }}>
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
@@ -112,9 +118,9 @@ export default function AuditPage() {
             <div style={{ background: "rgba(52,211,153,0.07)", border: "1px solid rgba(52,211,153,0.25)", borderRadius: "16px", padding: "28px 24px", textAlign: "center", marginBottom: "16px" }}>
               <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "28px", color: "#34d399", marginBottom: "4px" }}>£{teaser.annualSaving} waiting for you</div>
               <p style={{ fontFamily: "DM Sans, sans-serif", color: "#9ca3af", fontSize: "14px", marginBottom: "20px" }}>Unlock your full report to see exactly what to cut, what to replace, and your week-by-week action plan.</p>
-              <Link href="/checkout" style={{ display: "inline-block", background: "#34d399", color: "#000", fontFamily: "Syne, sans-serif", fontWeight: 700, padding: "14px 32px", borderRadius: "10px", textDecoration: "none", fontSize: "16px", boxShadow: "0 0 40px rgba(52,211,153,0.3)" }}>
+              <button onClick={goToCheckout} style={{ display: "inline-block", background: "#34d399", color: "#000", fontFamily: "Syne, sans-serif", fontWeight: 700, padding: "14px 32px", borderRadius: "10px", border: "none", cursor: "pointer", fontSize: "16px", boxShadow: "0 0 40px rgba(52,211,153,0.3)" }}>
                 Unlock Full Report — £19/mo →
-              </Link>
+              </button>
               <p style={{ fontFamily: "DM Sans, sans-serif", color: "#4b5563", fontSize: "12px", marginTop: "12px" }}>Cancel anytime · Pays for itself in week 1</p>
             </div>
 
