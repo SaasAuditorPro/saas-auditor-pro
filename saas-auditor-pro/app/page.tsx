@@ -253,9 +253,7 @@ export default function Home() {
             </div>
             <div>
               <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "12px", color: c.sub, letterSpacing: "1px", marginBottom: "12px" }}>LEGAL</div>
-              {[["Privacy Policy", "/privacy"], ["Terms & Conditions", "/terms"], ["Cookie Policy", "/cookies"]].map(([l, h]) => (
-                <div key={l} style={{ marginBottom: "8px" }}><Link href={h} style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.dim, textDecoration: "none" }}>{l}</Link></div>
-              ))}
+              <div style={{ marginBottom: "8px" }}><Link href="/legal" style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.dim, textDecoration: "none" }}>Legal & Privacy</Link></div>
             </div>
           </div>
         </div>
