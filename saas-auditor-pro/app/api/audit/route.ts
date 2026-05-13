@@ -27,7 +27,7 @@ ${subscriptions}
 Produce a report with these sections:
 
 💰 ESTIMATED MONTHLY WASTE
-Calculate total monthly spend and estimate what percentage is waste/overlap.
+Calculate total monthly spend and estimate what percentage is genuinely wasted or overlapping based on the actual subscriptions listed.
 
 🔴 CUT IMMEDIATELY (highest priority savings)
 List subscriptions to cancel with exact saving and reason.
@@ -44,9 +44,10 @@ Total monthly spend, estimated monthly saving, estimated annual saving.
 ⚡ ACTION PLAN
 Week by week priority order of what to do.
 
-Be specific, direct, and give exact figures. Format clearly. No waffle.`
+Be specific, direct, and give exact figures based only on what is actually in the list. Format clearly. No waffle.`
         }]
       });
+
       const report = message.content[0].type === "text" ? message.content[0].text : "";
       return NextResponse.json({ report, isPro: true });
 
@@ -56,7 +57,7 @@ Be specific, direct, and give exact figures. Format clearly. No waffle.`
         max_tokens: 300,
         messages: [{
           role: "user",
-          content: `You are a SaaS cost optimisation expert. Analyse this list of software subscriptions.
+          content: `You are a SaaS cost optimisation expert. Analyse this list of software subscriptions honestly.
 
 SUBSCRIPTIONS:
 ${subscriptions}
@@ -64,7 +65,7 @@ ${subscriptions}
 Return ONLY a JSON object with no markdown, no backticks:
 {
   "totalMonthly": <total monthly spend as number>,
-  "wastePct": <estimated waste percentage as number between 20-60>,
+  "wastePct": <estimated waste percentage as number, based only on genuine duplicates, unused tools and overpriced software actually visible in the list>,
   "annualSaving": <estimated annual saving as number>,
   "toolCount": <number of subscriptions>,
   "biggestWaste": "<name of single biggest waste tool>"
@@ -73,9 +74,14 @@ Return ONLY a JSON object with no markdown, no backticks:
       });
 
       const text = message.content[0].type === "text" ? message.content[0].text : "{}";
-      const clean = text.replace(/```json|```/g, "").trim();
-      const data = JSON.parse(clean);
-      return NextResponse.json({ teaser: data, isPro: false });
+
+      try {
+        const clean = text.replace(/```json|```/g, "").trim();
+        const data = JSON.parse(clean);
+        return NextResponse.json({ ...data, isPro: false });
+      } catch {
+        return NextResponse.json({ error: "Failed to parse analysis" }, { status: 500 });
+      }
     }
 
   } catch (error) {
