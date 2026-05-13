@@ -1,266 +1,205 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { marked } from "marked";
+
+const PLACEHOLDER = `Slack - £12/month
+Notion - £16/month
+Asana - £25/month
+Trello - £10/month
+Monday.com - £20/month
+Zoom - £15/month
+Google Workspace - £10/month
+Dropbox - £10/month
+HubSpot - £45/month
+Mailchimp - £35/month
+Canva Pro - £12/month
+Adobe Creative Cloud - £55/month`;
+
+const DEMO_PASSWORD = "SaaSdemoPro10*";
 
 const c = {
-  bg: "#050b14",
+  bg: "#080c10",
   card: "#0c1525",
-  cardBorder: "rgba(96,165,250,0.1)",
   green: "#34d399",
-  greenBg: "rgba(52,211,153,0.08)",
   greenBorder: "rgba(52,211,153,0.25)",
-  blue: "#60a5fa",
-  blueBg: "rgba(96,165,250,0.08)",
   text: "#f1f5f9",
   sub: "#94a3b8",
   dim: "#475569",
-  red: "#f87171",
 };
 
-const stats = [
-  { n: "49%", label: "of SaaS licences go unused — software paid for that nobody opens", src: "Zylo SaaS Management Index 2025" },
-  { n: "7.6", label: "duplicate apps the average business runs simultaneously, paying twice for the same job", src: "Chief Martec" },
-  { n: "1-in-3", label: "software pounds is wasted spend — unused, duplicated or overpriced tools", src: "Zylo / CFO Dive 2024" },
-  { n: "22%", label: "rise in SaaS costs per employee in 2025 alone — prices growing faster than your revenue", src: "Zylo SaaS Management Index 2025" },
-];
+export default function AuditPage() {
+  const [subscriptions, setSubscriptions] = useState("");
+  const [email, setEmail] = useState("");
+  const [demoPassword, setDemoPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [teaser, setTeaser] = useState<any>(null);
+  const [report, setReport] = useState("");
+  const [error, setError] = useState("");
+  const [showDemo, setShowDemo] = useState(false);
 
-const faqs = [
-  { q: "Is the snapshot really free?", a: "Yes — paste your subscriptions, get your savings figure and biggest drain for free. No card needed, no account required. The full breakdown with specific cuts, alternatives and action plan is unlocked with a Basic plan." },
-  { q: "Do you need access to my bank account?", a: "Never. Unlike other tools, we don't connect to your bank. Just paste your list of subscriptions and costs. Your financial data stays entirely with you." },
-  { q: "How accurate is the AI analysis?", a: "Highly accurate for identifying waste and overlaps. The savings figures are AI estimates based on your specific stack — real savings will vary, but our users consistently find the report identifies cuts they hadn't considered." },
-  { q: "What's the Founder Member pricing?", a: "The first 100 customers lock in Basic at £19/month forever — even when we raise to £29/month. This is our way of rewarding the businesses that believe in us early. Once 100 seats are taken, this offer closes permanently." },
-  { q: "Can I cancel anytime?", a: "Yes — no contracts, no notice period. Cancel in one click from your Stripe customer portal. We're confident the savings you find will more than justify the subscription, but you're never locked in." },
-  { q: "Does this work for my industry?", a: "Yes. Any business that pays for software monthly has this problem — whether you're in construction, beauty, retail, professional services, or e-commerce. The AI adapts its analysis to your specific stack." },
-];
+  const isDemoMode = demoPassword === DEMO_PASSWORD;
 
-export default function Home() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const runAudit = async () => {
+    if (!subscriptions.trim()) { setError("Please paste your subscriptions first."); return; }
+    setError(""); setLoading(true); setTeaser(null); setReport("");
+    try {
+      const res = await fetch("/api/audit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subscriptions, email, isPro: isDemoMode })
+      });
+      const data = await res.json();
+      if (data.error) {
+        setError(data.error);
+      } else if (isDemoMode) {
+        setReport(data.report);
+      } else {
+        setTeaser(data.teaser);
+      }
+    } catch { setError("Something went wrong. Please try again."); }
+    finally { setLoading(false); }
+  };
+
+  const goToCheckout = async () => {
+    const res = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+  };
+
+  const renderedReport = report ? marked(report) as string : "";
 
   return (
-    <main style={{ minHeight: "100vh", background: c.bg, color: c.text }}>
-
-      {/* Founder banner */}
-      <div style={{ background: "rgba(52,211,153,0.12)", borderBottom: "1px solid rgba(52,211,153,0.2)", padding: "10px 24px", textAlign: "center" }}>
-        <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: "13px", color: c.green }}>
-          🎯 <strong>Founder Member Offer:</strong> First 100 customers lock in £19/month forever — price rises to £29/month after that.
-          <Link href="/audit" style={{ color: "#fff", marginLeft: "12px", textDecoration: "underline", fontWeight: 600 }}>Claim your spot →</Link>
-        </span>
-      </div>
-
-      {/* Nav */}
-      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", maxWidth: "1100px", margin: "0 auto", flexWrap: "wrap", gap: "12px" }}>
-        <Link href="/">
-          <img src="/logo.svg" alt="SaaS Auditor Pro" style={{ height: "76px", width: "auto" }} />
+    <main style={{ minHeight: "100vh", background: c.bg }}>
+      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 40px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <Link href="/" style={{ textDecoration: "none" }}>
+          <img src="/logo.svg" alt="SaaS Auditor Pro" style={{ height: "52px", width: "auto" }} />
         </Link>
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          <Link href="#how" className="nav-link" style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, textDecoration: "none" }}>How it works</Link>
-          <Link href="#pricing" className="nav-link" style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, textDecoration: "none" }}>Pricing</Link>
-          <Link href="/audit" style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "13px", background: c.green, color: "#000", padding: "9px 16px", borderRadius: "8px", textDecoration: "none", whiteSpace: "nowrap" }}>Get Free Snapshot</Link>
-        </div>
-        <style>{`@media (max-width: 600px) { .nav-link { display: none !important; } }`}</style>
+        <Link href="/checkout" style={{ fontSize: "13px", background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.3)", color: c.green, padding: "8px 16px", borderRadius: "8px", textDecoration: "none", fontFamily: "DM Sans, sans-serif" }}>Upgrade →</Link>
       </nav>
 
-      {/* Hero */}
-      <section style={{ maxWidth: "860px", margin: "0 auto", padding: "64px 24px 48px", textAlign: "center" }}>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: c.blueBg, border: `1px solid rgba(96,165,250,0.2)`, borderRadius: "100px", padding: "6px 16px", marginBottom: "28px" }}>
-          <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: c.blue, display: "inline-block" }} />
-          <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: "12px", color: c.blue, letterSpacing: "0.5px" }}>Built for UK Small Businesses</span>
+      <div style={{ maxWidth: "760px", margin: "0 auto", padding: "48px 32px" }}>
+
+        {/* Demo mode toggle */}
+        <div style={{ textAlign: "right", marginBottom: "12px" }}>
+          <button onClick={() => setShowDemo(!showDemo)} style={{ background: "none", border: "none", color: c.dim, fontSize: "12px", cursor: "pointer", fontFamily: "DM Sans, sans-serif" }}>
+            {showDemo ? "Hide demo mode" : "Demo mode"}
+          </button>
         </div>
 
-        <h1 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "clamp(36px, 7vw, 72px)", lineHeight: 1.04, letterSpacing: "-2px", color: c.text, marginBottom: "24px" }}>
-          UK businesses are losing<br />
-          <span style={{ color: c.green, textShadow: "0 0 60px rgba(52,211,153,0.35)" }}>money every month</span><br />
-          on software waste.
-        </h1>
+        {showDemo && (
+          <div style={{ background: "rgba(96,165,250,0.06)", border: "1px solid rgba(96,165,250,0.15)", borderRadius: "12px", padding: "16px 20px", marginBottom: "20px" }}>
+            <label style={{ fontFamily: "DM Sans, sans-serif", fontSize: "13px", color: "#60a5fa", display: "block", marginBottom: "8px" }}>Demo password</label>
+            <input
+              type="password"
+              value={demoPassword}
+              onChange={e => setDemoPassword(e.target.value)}
+              placeholder="Enter demo password"
+              style={{ width: "100%", background: "#0c1525", border: "1px solid rgba(96,165,250,0.2)", borderRadius: "8px", padding: "10px 14px", color: c.text, fontFamily: "DM Sans, sans-serif", fontSize: "14px", boxSizing: "border-box" }}
+            />
+            {isDemoMode && <p style={{ fontFamily: "DM Sans, sans-serif", fontSize: "12px", color: c.green, marginTop: "8px" }}>✓ Demo mode active — full report unlocked</p>}
+          </div>
+        )}
 
-        <p style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, fontSize: "clamp(16px, 2.5vw, 19px)", maxWidth: "580px", margin: "0 auto 36px", lineHeight: 1.75 }}>
-          Paste your subscriptions. Our AI identifies every wasted pound — duplicates, unused tools, overpriced software — and tells you exactly what to do about it. <strong style={{ color: c.text }}>In 30 seconds.</strong>
-        </p>
+        {!teaser && !report ? (
+          <>
+            <h1 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 5vw, 42px)", color: c.text, marginBottom: "12px", letterSpacing: "-1px" }}>Run Your Audit</h1>
+            <p style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, fontSize: "16px", marginBottom: "32px", lineHeight: 1.7 }}>
+              List your subscriptions below — one per line with the monthly cost. Not sure what you pay for? Check your bank or card statement for recurring charges and paste them below.
+            </p>
 
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "14px", marginBottom: "40px" }}>
-          <Link href="/audit" style={{ display: "inline-flex", alignItems: "center", gap: "10px", background: c.green, color: "#000", fontFamily: "Syne, sans-serif", fontWeight: 700, padding: "17px 36px", borderRadius: "12px", fontSize: "17px", textDecoration: "none", boxShadow: "0 0 60px rgba(52,211,153,0.25)" }}>
-            Get My Free Savings Snapshot →
-          </Link>
-          <span style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "13px" }}>No bank connection · No account needed · Free forever</span>
-        </div>
-
-        {/* Trust signals */}
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "16px" }}>
-          {["🔒 No bank access required", "🇬🇧 Built for UK businesses", "⚡ 30-second results", "🔐 Your data stays private"].map(t => (
-            <div key={t} style={{ fontFamily: "DM Sans, sans-serif", fontSize: "13px", color: c.sub, background: c.card, border: `1px solid ${c.cardBorder}`, padding: "7px 14px", borderRadius: "100px" }}>{t}</div>
-          ))}
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section style={{ maxWidth: "1000px", margin: "0 auto", padding: "0 24px 80px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "12px" }}>
-          {stats.map(s => (
-            <div key={s.n} style={{ background: c.card, border: `1px solid ${c.cardBorder}`, borderRadius: "16px", padding: "24px 20px" }}>
-              <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "38px", color: c.green, letterSpacing: "-1px", marginBottom: "8px" }}>{s.n}</div>
-              <div style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, fontSize: "14px", lineHeight: 1.6, marginBottom: "8px" }}>{s.label}</div>
-              <div style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "11px" }}>Source: {s.src}</div>
+            <div style={{ marginBottom: "20px" }}>
+              <label style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, display: "block", marginBottom: "8px" }}>Your subscriptions <span style={{ color: c.dim }}>(one per line, include cost)</span></label>
+              <textarea
+                value={subscriptions}
+                onChange={e => setSubscriptions(e.target.value)}
+                placeholder={PLACEHOLDER}
+                rows={10}
+                style={{ width: "100%", background: "#0c1525", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "12px", padding: "16px", color: c.text, fontFamily: "DM Sans, sans-serif", fontSize: "14px", lineHeight: 1.7, resize: "vertical", boxSizing: "border-box" }}
+              />
             </div>
-          ))}
-        </div>
-      </section>
 
-      {/* How it works */}
-      <section id="how" style={{ maxWidth: "900px", margin: "0 auto", padding: "0 24px 80px" }}>
-        <div style={{ textAlign: "center", marginBottom: "48px" }}>
-          <h2 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 4vw, 40px)", color: c.text, letterSpacing: "-1px", marginBottom: "12px" }}>How it works</h2>
-          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, fontSize: "16px" }}>No integrations. No bank connection. Just paste and go.</p>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
-          {[
-            { step: "01", title: "Paste your subscriptions", desc: "List your tools and monthly costs — one per line. Takes 2 minutes. No account needed.", icon: "📋" },
-            { step: "02", title: "AI analyses your stack", desc: "Our AI identifies duplicates, unused tools, overpriced software and cheaper alternatives instantly.", icon: "🔍" },
-            { step: "03", title: "See your savings figure", desc: "Your free snapshot shows exactly how much you're wasting annually — the full breakdown unlocks with Basic.", icon: "💰" },
-          ].map(s => (
-            <div key={s.step} style={{ background: c.card, border: `1px solid ${c.cardBorder}`, borderRadius: "16px", padding: "28px 24px" }}>
-              <div style={{ fontSize: "32px", marginBottom: "16px" }}>{s.icon}</div>
-              <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "11px", color: c.green, letterSpacing: "2px", marginBottom: "8px" }}>STEP {s.step}</div>
-              <h3 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "17px", color: c.text, marginBottom: "10px" }}>{s.title}</h3>
-              <p style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, fontSize: "14px", lineHeight: 1.7, margin: 0 }}>{s.desc}</p>
+            <div style={{ marginBottom: "24px" }}>
+              <label style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, display: "block", marginBottom: "8px" }}>Your email <span style={{ color: c.dim }}>(optional)</span></label>
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                style={{ width: "100%", background: "#0c1525", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "12px", padding: "14px 16px", color: c.text, fontFamily: "DM Sans, sans-serif", fontSize: "14px", boxSizing: "border-box" }}
+              />
             </div>
-          ))}
-        </div>
-      </section>
 
-      {/* Who it's for */}
-      <section style={{ maxWidth: "900px", margin: "0 auto", padding: "0 24px 80px" }}>
-        <div style={{ background: c.card, border: `1px solid ${c.cardBorder}`, borderRadius: "20px", padding: "40px 32px" }}>
-          <h2 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "clamp(24px, 3vw, 32px)", color: c.text, marginBottom: "8px", letterSpacing: "-0.5px" }}>Built for every UK small business</h2>
-          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, fontSize: "15px", marginBottom: "28px" }}>If you pay for software monthly, you have this problem. Our users include:</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "10px" }}>
-            {["🔧 Tradespeople", "💅 Beauty & Wellness", "🏗️ Construction", "🛍️ E-commerce", "📊 Accountants", "🎨 Creative agencies", "⚖️ Legal & Consulting", "🍰 Food & Hospitality", "🏋️ Fitness & Coaching", "🔑 Estate Agents", "🚗 Auto & Transport", "💻 Tech & Freelancers"].map(b => (
-              <div key={b} style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${c.cardBorder}`, borderRadius: "10px", padding: "10px 14px", fontFamily: "DM Sans, sans-serif", fontSize: "13px", color: c.sub }}>{b}</div>
-            ))}
-          </div>
-        </div>
-      </section>
+            {error && <div style={{ background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.3)", borderRadius: "10px", padding: "12px 16px", marginBottom: "20px", fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: "#f87171" }}>{error}</div>}
 
-      {/* Pricing */}
-      <section id="pricing" style={{ maxWidth: "800px", margin: "0 auto", padding: "0 24px 80px" }}>
-        <div style={{ textAlign: "center", marginBottom: "40px" }}>
-          <h2 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 4vw, 40px)", color: c.text, letterSpacing: "-1px", marginBottom: "12px" }}>Pricing that pays for itself</h2>
-          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, fontSize: "16px" }}>Find more in savings than you spend on the tool — or cancel anytime.</p>
-        </div>
+            <button
+              onClick={runAudit}
+              disabled={loading}
+              style={{ width: "100%", background: c.green, color: "#000", fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "16px", padding: "16px", borderRadius: "12px", border: "none", cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.7 : 1 }}
+            >
+              {loading ? "Analysing your stack..." : isDemoMode ? "Run Full Demo Audit →" : "Run My Free Audit →"}
+            </button>
+          </>
+        ) : teaser ? (
+          <>
+            <h2 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "32px", color: c.text, marginBottom: "32px", letterSpacing: "-1px" }}>Your Audit Results</h2>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "20px" }}>
-          {/* Free */}
-          <div style={{ background: c.card, border: `1px solid ${c.cardBorder}`, borderRadius: "18px", padding: "28px 24px" }}>
-            <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, color: c.sub, fontSize: "13px", letterSpacing: "1px", marginBottom: "8px" }}>FREE</div>
-            <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "36px", color: c.text, marginBottom: "4px", letterSpacing: "-1px" }}>£0</div>
-            <div style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "13px", marginBottom: "24px" }}>Always free</div>
-            <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px" }}>
-              {["✓ Free savings snapshot", "✓ Annual waste figure", "✓ Biggest drain identified", "✗ Full breakdown", "✗ Action plan"].map((f, i) => (
-                <li key={i} style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: i < 3 ? c.sub : c.dim, padding: "5px 0" }}>{f}</li>
-              ))}
-            </ul>
-            <Link href="/audit" style={{ display: "block", textAlign: "center", border: `1px solid ${c.cardBorder}`, color: c.sub, padding: "11px", borderRadius: "8px", textDecoration: "none", fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "13px" }}>Get Free Snapshot</Link>
-          </div>
-
-          {/* Basic */}
-          <div style={{ position: "relative", background: "rgba(52,211,153,0.05)", border: `1px solid ${c.greenBorder}`, borderRadius: "18px", padding: "28px 24px" }}>
-            <div style={{ position: "absolute", top: "-13px", left: "50%", transform: "translateX(-50%)", background: c.green, color: "#000", fontSize: "11px", fontFamily: "Syne, sans-serif", fontWeight: 700, padding: "4px 14px", borderRadius: "100px", whiteSpace: "nowrap" }}>FOUNDER PRICE</div>
-            <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, color: c.green, fontSize: "13px", letterSpacing: "1px", marginBottom: "8px" }}>BASIC</div>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "8px", marginBottom: "4px" }}>
-              <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "36px", color: c.green, letterSpacing: "-1px" }}>£19</div>
-              <div style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "14px", textDecoration: "line-through" }}>£29</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "24px" }}>
+              <div style={{ background: c.card, border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", padding: "24px" }}>
+                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: "12px", color: c.dim, letterSpacing: "1px", marginBottom: "8px" }}>MONTHLY SPEND</div>
+                <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "40px", color: c.text }}>£{teaser?.totalMonthly}</div>
+              </div>
+              <div style={{ background: "rgba(52,211,153,0.05)", border: `1px solid ${c.greenBorder}`, borderRadius: "16px", padding: "24px" }}>
+                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: "12px", color: c.green, letterSpacing: "1px", marginBottom: "8px" }}>POTENTIAL SAVING</div>
+                <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "40px", color: c.green }}>£{teaser?.annualSaving}/yr</div>
+              </div>
             </div>
-            <div style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "13px", marginBottom: "24px" }}>per month · first 100 only</div>
-            <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px" }}>
-              {["✓ Unlimited full audits", "✓ Complete savings breakdown", "✓ Week-by-week action plan", "✓ Cheaper alternatives named", "✓ Locked-in founder price"].map((f, i) => (
-                <li key={i} style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, padding: "5px 0" }}>{f}</li>
-              ))}
-            </ul>
-            <Link href="/checkout" style={{ display: "block", textAlign: "center", background: c.green, color: "#000", padding: "13px", borderRadius: "8px", textDecoration: "none", fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "14px", boxShadow: "0 0 30px rgba(52,211,153,0.2)" }}>Lock In Founder Price →</Link>
-          </div>
 
-          {/* Pro coming soon */}
-          <div style={{ background: c.card, border: `1px solid ${c.cardBorder}`, borderRadius: "18px", padding: "28px 24px", opacity: 0.6 }}>
-            <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, color: c.blue, fontSize: "13px", letterSpacing: "1px", marginBottom: "8px" }}>PRO</div>
-            <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "36px", color: c.text, marginBottom: "4px", letterSpacing: "-1px" }}>£39</div>
-            <div style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "13px", marginBottom: "24px" }}>per month · coming soon</div>
-            <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px" }}>
-              {["✓ Everything in Basic", "✓ Monthly auto-monitoring", "✓ Renewal alerts", "✓ Price increase notifications", "✓ Saved subscription stack"].map((f, i) => (
-                <li key={i} style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, padding: "5px 0" }}>{f}</li>
-              ))}
-            </ul>
-            <div style={{ display: "block", textAlign: "center", border: `1px solid ${c.cardBorder}`, color: c.dim, padding: "11px", borderRadius: "8px", fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "13px" }}>Coming Soon</div>
-          </div>
-        </div>
+            <div style={{ background: c.card, border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", padding: "28px", marginBottom: "24px", position: "relative", overflow: "hidden" }}>
+              <p style={{ fontFamily: "DM Sans, sans-serif", fontSize: "15px", color: c.sub, marginBottom: "20px" }}>
+                We analysed your <strong style={{ color: c.text }}>{teaser?.toolCount} subscriptions</strong> and found <strong style={{ color: c.text }}>{teaser?.wastePct}% waste</strong>. Your biggest drain is <strong style={{ color: c.green }}>{teaser?.biggestWaste}</strong>.
+              </p>
 
-        <p style={{ textAlign: "center", fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px" }}>
-          Founder pricing locked forever as long as you stay subscribed · Cancel anytime · No contracts
-        </p>
-      </section>
+              <div style={{ filter: "blur(4px)", pointerEvents: "none", userSelect: "none", opacity: 0.5 }}>
+                {["🔴 Cut immediately: Hootsuite — save £49/month", "🟡 Replace: Mailchimp → Brevo — save £23/month", "🟢 Overlap: Xero + QuickBooks — paying twice", "📊 Summary: £127/month saveable", "⚡ Week 1: Cancel Hootsuite today"].map((line, i) => (
+                  <div key={i} style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>{line}</div>
+                ))}
+              </div>
 
-      {/* FAQ */}
-      <section style={{ maxWidth: "700px", margin: "0 auto", padding: "0 24px 80px" }}>
-        <h2 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "clamp(24px, 3vw, 36px)", color: c.text, letterSpacing: "-1px", textAlign: "center", marginBottom: "40px" }}>Frequently asked questions</h2>
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          {faqs.map((faq, i) => (
-            <div key={i} style={{ background: c.card, border: `1px solid ${openFaq === i ? c.greenBorder : c.cardBorder}`, borderRadius: "12px", overflow: "hidden", transition: "border-color 0.2s" }}>
-              <button onClick={() => setOpenFaq(openFaq === i ? null : i)} style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 20px", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}>
-                <span style={{ fontFamily: "Syne, sans-serif", fontWeight: 600, fontSize: "15px", color: c.text }}>{faq.q}</span>
-                <span style={{ color: c.green, fontSize: "20px", lineHeight: 1 }}>{openFaq === i ? "−" : "+"}</span>
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center", zIndex: 10 }}>
+                <div style={{ fontSize: "28px", marginBottom: "8px" }}>🔒</div>
+                <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "18px", color: c.text }}>Full report locked</div>
+                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: "13px", color: c.sub }}>Upgrade to unlock every saving</div>
+              </div>
+            </div>
+
+            <div style={{ background: "rgba(52,211,153,0.04)", border: `1px solid ${c.greenBorder}`, borderRadius: "16px", padding: "28px", textAlign: "center" }}>
+              <h3 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "24px", color: c.green, marginBottom: "8px" }}>£{teaser?.annualSaving} waiting for you</h3>
+              <p style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, fontSize: "14px", marginBottom: "24px" }}>Unlock your full report to see exactly what to cut, what to replace, and your week-by-week action plan.</p>
+              <button onClick={goToCheckout} style={{ display: "inline-block", background: c.green, color: "#000", fontFamily: "Syne, sans-serif", fontWeight: 700, padding: "14px 32px", borderRadius: "10px", border: "none", cursor: "pointer", fontSize: "16px", boxShadow: "0 0 40px rgba(52,211,153,0.3)" }}>
+                Unlock Full Report — £19/mo →
               </button>
-              {openFaq === i && (
-                <div style={{ padding: "0 20px 18px", fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, lineHeight: 1.75 }}>{faq.a}</div>
-              )}
+              <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px", marginTop: "12px" }}>Cancel anytime · Pays for itself in week 1</p>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section style={{ maxWidth: "700px", margin: "0 auto", padding: "0 24px 100px", textAlign: "center" }}>
-        <div style={{ background: "rgba(52,211,153,0.06)", border: `1px solid ${c.greenBorder}`, borderRadius: "24px", padding: "56px 32px" }}>
-          <h2 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 4vw, 42px)", color: c.text, letterSpacing: "-1px", marginBottom: "16px" }}>
-            Find your wasted spend.<br />
-            <span style={{ color: c.green }}>In 30 seconds. For free.</span>
-          </h2>
-          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, fontSize: "16px", marginBottom: "32px", maxWidth: "460px", margin: "0 auto 32px" }}>
-            No bank connection. No account required. Just paste your subscriptions and see exactly how much you're losing.
-          </p>
-          <Link href="/audit" style={{ display: "inline-flex", alignItems: "center", gap: "10px", background: c.green, color: "#000", fontFamily: "Syne, sans-serif", fontWeight: 700, padding: "17px 36px", borderRadius: "12px", fontSize: "17px", textDecoration: "none", boxShadow: "0 0 60px rgba(52,211,153,0.2)" }}>
-            Get My Free Snapshot →
-          </Link>
-          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px", marginTop: "16px" }}>First 100 founder members · £19/month locked forever</p>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer style={{ borderTop: `1px solid ${c.cardBorder}`, padding: "40px 24px" }}>
-        <div style={{ maxWidth: "1000px", margin: "0 auto", display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "24px" }}>
-          <div>
-            <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "17px", marginBottom: "8px" }}>
-              <span style={{ color: c.green }}>SaaS</span>
-              <span style={{ color: c.text }}>Auditor</span>
-              <span style={{ color: c.dim }}>Pro</span>
+          </>
+        ) : (
+          <>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "32px", flexWrap: "wrap", gap: "12px" }}>
+              <h2 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "28px", color: c.text, letterSpacing: "-0.5px" }}>Your Full Audit Report</h2>
+              {isDemoMode && <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: "12px", color: "#60a5fa", background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.2)", padding: "4px 12px", borderRadius: "100px" }}>Demo Mode</span>}
             </div>
-            <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "13px", maxWidth: "240px", lineHeight: 1.6 }}>AI-powered software spend auditing for UK small businesses.</p>
-          </div>
-          <div style={{ display: "flex", gap: "40px", flexWrap: "wrap" }}>
-            <div>
-              <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "12px", color: c.sub, letterSpacing: "1px", marginBottom: "12px" }}>PRODUCT</div>
-              {[["Run Free Audit", "/audit"], ["Pricing", "#pricing"], ["How it works", "#how"]].map(([l, h]) => (
-                <div key={l} style={{ marginBottom: "8px" }}><Link href={h} style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.dim, textDecoration: "none" }}>{l}</Link></div>
-              ))}
+            <div
+              dangerouslySetInnerHTML={{ __html: renderedReport }}
+              style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, lineHeight: 1.8, fontSize: "15px" }}
+            />
+            <div style={{ marginTop: "40px", textAlign: "center" }}>
+              <button onClick={() => { setReport(""); setTeaser(null); setSubscriptions(""); }} style={{ background: "none", border: `1px solid rgba(255,255,255,0.1)`, color: c.sub, fontFamily: "DM Sans, sans-serif", fontSize: "14px", padding: "10px 24px", borderRadius: "8px", cursor: "pointer" }}>
+                Run another audit
+              </button>
             </div>
-            <div>
-              <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "12px", color: c.sub, letterSpacing: "1px", marginBottom: "12px" }}>LEGAL</div>
-              <div style={{ marginBottom: "8px" }}><Link href="/legal" style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.dim, textDecoration: "none" }}>Legal & Privacy</Link></div>
-            </div>
-          </div>
-        </div>
-        <div style={{ maxWidth: "1000px", margin: "24px auto 0", paddingTop: "24px", borderTop: `1px solid ${c.cardBorder}`, display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "12px" }}>
-          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px" }}>© 2026 SaaS Auditor Pro · Registered in England & Wales</p>
-          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px" }}>Questions? saasauditorpro@gmail.com</p>
-        </div>
-      </footer>
+          </>
+        )}
+      </div>
     </main>
   );
 }
