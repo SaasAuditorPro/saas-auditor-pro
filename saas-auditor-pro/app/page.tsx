@@ -49,11 +49,9 @@ export default function Home() {
 
       {/* Nav */}
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", maxWidth: "1100px", margin: "0 auto", flexWrap: "wrap", gap: "12px" }}>
-        <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "19px", letterSpacing: "-0.5px" }}>
-          <span style={{ color: c.green }}>SaaS</span>
-          <span style={{ color: c.text }}>Auditor</span>
-          <span style={{ color: c.dim }}>Pro</span>
-        </div>
+        <Link href="/">
+          <img src="/logo.svg" alt="SaaS Auditor Pro" style={{ height: "36px", width: "auto" }} />
+        </Link>
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
           <Link href="#how" className="nav-link" style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, textDecoration: "none" }}>How it works</Link>
           <Link href="#pricing" className="nav-link" style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, textDecoration: "none" }}>Pricing</Link>
