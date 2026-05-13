@@ -18,10 +18,10 @@ const c = {
 };
 
 const stats = [
-  { n: "51%", label: "of UK SaaS licences go unused every month", src: "Zylo SaaS Report 2025" },
-  { n: "£3,847", label: "average annual software waste per UK small business", src: "Paddle SMB Study 2025" },
-  { n: "45%", label: "of SMBs are paying for duplicate tools right now", src: "BetterCloud 2025" },
-  { n: "12.2%", label: "SaaS price inflation in 2025 — 4.5x general inflation", src: "Vertice Pricing Index" },
+  { n: "49%", label: "of SaaS licences go unused — software paid for that nobody opens", src: "Zylo SaaS Management Index 2025" },
+  { n: "7.6", label: "duplicate apps the average business runs simultaneously, paying twice for the same job", src: "Chief Martec" },
+  { n: "1-in-3", label: "software pounds is wasted spend — unused, duplicated or overpriced tools", src: "Zylo / CFO Dive 2024" },
+  { n: "22%", label: "rise in SaaS costs per employee in 2025 alone — prices growing faster than your revenue", src: "Zylo SaaS Management Index 2025" },
 ];
 
 const faqs = [
@@ -71,7 +71,7 @@ export default function Home() {
 
         <h1 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "clamp(36px, 7vw, 72px)", lineHeight: 1.04, letterSpacing: "-2px", color: c.text, marginBottom: "24px" }}>
           UK businesses are losing<br />
-          <span style={{ color: c.green, textShadow: "0 0 60px rgba(52,211,153,0.35)" }}>£3,847 a year</span><br />
+          <span style={{ color: c.green, textShadow: "0 0 60px rgba(52,211,153,0.35)" }}>money every month</span><br />
           on software waste.
         </h1>
 
@@ -146,7 +146,7 @@ export default function Home() {
       <section id="pricing" style={{ maxWidth: "800px", margin: "0 auto", padding: "0 24px 80px" }}>
         <div style={{ textAlign: "center", marginBottom: "40px" }}>
           <h2 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 4vw, 40px)", color: c.text, letterSpacing: "-1px", marginBottom: "12px" }}>Pricing that pays for itself</h2>
-          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, fontSize: "16px" }}>The average user finds <strong style={{ color: c.text }}>£3,847 in annual savings</strong>. Basic costs £228/year.</p>
+          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, fontSize: "16px" }}>Find more in savings than you spend on the tool — or cancel anytime.</p>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "20px" }}>
