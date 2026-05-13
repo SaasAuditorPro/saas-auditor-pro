@@ -31,7 +31,13 @@ Identify tools that do the same thing - they are paying twice.
 Total monthly spend, estimated monthly saving, estimated annual saving.
 ⚡ ACTION PLAN
 Week by week priority order of what to do.
-Be specific, direct, and give exact figures. Format clearly. No waffle.`
+Be specific, direct, and give exact figures. Format clearly. No waffle.
+IMPORTANT RULES:
+- Only recommend alternatives you are 100% certain exist and are genuinely cheaper
+- Do NOT recommend any subscription management, spend tracking, or SaaS auditing tools
+- Do NOT make up or hallucinate any tool names or products
+- Only base your analysis on what is actually in the subscription list provided
+- Do not add generic advice about ongoing monitoring tools`
         }]
       });
       const report = message.content[0].type === "text" ? message.content[0].text : "";
