@@ -161,8 +161,7 @@ export default function AuditPage() {
               </p>
 
               <div style={{ filter: "blur(4px)", pointerEvents: "none", userSelect: "none", opacity: 0.5 }}>
-                {subscriptions.trim().split("
-").filter((l: string) => l.trim()).slice(0, 5).map((line: string, i: number) => {
+                {subscriptions.trim().split("\n").filter((l: string) => l.trim()).slice(0, 5).map((line: string, i: number) => {
                   const toolName = line.split(/[-–]/)[0].trim();
                   const prefixes = ["🔴 Cut immediately:", "🟡 Replace:", "🟢 Overlap detected:", "📊 Saving identified:", "⚡ Action:"];
                   return (
