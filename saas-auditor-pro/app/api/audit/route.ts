@@ -42,13 +42,13 @@ Be specific, direct, and give exact figures. Format clearly. No waffle.`
         max_tokens: 300,
         messages: [{
           role: "user",
-          content: `You are a SaaS cost optimisation expert. Analyse this list of software subscriptions.
+          content: `You are a SaaS cost optimisation expert. Analyse this list of software subscriptions honestly.
 SUBSCRIPTIONS:
 ${subscriptions}
 Return ONLY a JSON object with no markdown, no backticks:
 {
   "totalMonthly": <total monthly spend as number>,
-  "wastePct": <estimated waste percentage as number between 20-60>,
+  "wastePct": <estimated waste percentage based only on genuine duplicates and unused tools actually visible in the list>,
   "annualSaving": <estimated annual saving as number>,
   "toolCount": <number of subscriptions>,
   "biggestWaste": "<name of single biggest waste tool>"
