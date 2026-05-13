@@ -48,7 +48,7 @@ export default function Home() {
       </div>
 
       {/* Nav */}
-      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 32px", maxWidth: "1100px", margin: "0 auto" }}>
+      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", maxWidth: "1100px", margin: "0 auto", flexWrap: "wrap", gap: "12px" }}>
         <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "19px", letterSpacing: "-0.5px" }}>
           <span style={{ color: c.green }}>SaaS</span>
           <span style={{ color: c.text }}>Auditor</span>
