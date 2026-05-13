@@ -161,9 +161,16 @@ export default function AuditPage() {
               </p>
 
               <div style={{ filter: "blur(4px)", pointerEvents: "none", userSelect: "none", opacity: 0.5 }}>
-                {["🔴 Cut immediately: Hootsuite — save £49/month", "🟡 Replace: Mailchimp → Brevo — save £23/month", "🟢 Overlap: Xero + QuickBooks — paying twice", "📊 Summary: £127/month saveable", "⚡ Week 1: Cancel Hootsuite today"].map((line, i) => (
-                  <div key={i} style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>{line}</div>
-                ))}
+                {subscriptions.trim().split("
+").filter((l: string) => l.trim()).slice(0, 5).map((line: string, i: number) => {
+                  const toolName = line.split(/[-–]/)[0].trim();
+                  const prefixes = ["🔴 Cut immediately:", "🟡 Replace:", "🟢 Overlap detected:", "📊 Saving identified:", "⚡ Action:"];
+                  return (
+                    <div key={i} style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                      {prefixes[i]} {toolName} — unlock to see details
+                    </div>
+                  );
+                })}
               </div>
 
               <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center", zIndex: 10 }}>
