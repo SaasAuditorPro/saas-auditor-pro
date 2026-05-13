@@ -54,11 +54,12 @@ export default function Home() {
           <span style={{ color: c.text }}>Auditor</span>
           <span style={{ color: c.dim }}>Pro</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
-          <Link href="#how" style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, textDecoration: "none" }}>How it works</Link>
-          <Link href="#pricing" style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, textDecoration: "none" }}>Pricing</Link>
-          <Link href="/audit" style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "13px", background: c.green, color: "#000", padding: "9px 20px", borderRadius: "8px", textDecoration: "none" }}>Get Free Snapshot</Link>
+        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          <Link href="#how" className="nav-link" style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, textDecoration: "none" }}>How it works</Link>
+          <Link href="#pricing" className="nav-link" style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, textDecoration: "none" }}>Pricing</Link>
+          <Link href="/audit" style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "13px", background: c.green, color: "#000", padding: "9px 16px", borderRadius: "8px", textDecoration: "none", whiteSpace: "nowrap" }}>Get Free Snapshot</Link>
         </div>
+        <style>{`@media (max-width: 600px) { .nav-link { display: none !important; } }`}</style>
       </nav>
 
       {/* Hero */}
