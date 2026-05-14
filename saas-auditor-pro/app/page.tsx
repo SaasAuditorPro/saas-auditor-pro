@@ -28,7 +28,7 @@ const faqs = [
   { q: "Is the snapshot really free?", a: "Yes — paste your subscriptions, get your savings figure and biggest drain for free. No card needed, no account required. The full breakdown with specific cuts, alternatives and action plan is unlocked with a Basic plan." },
   { q: "Do you need access to my bank account?", a: "Never. Unlike other tools, we don't connect to your bank. Just paste your list of subscriptions and costs. Your financial data stays entirely with you." },
   { q: "How accurate is the AI analysis?", a: "Highly accurate for identifying waste and overlaps. The savings figures are AI estimates based on your specific stack — real savings will vary, but our users consistently find the report identifies cuts they hadn't considered." },
-  { q: "What's the Founder Member pricing?", a: "The first 100 customers lock in Basic at £19/month forever — even when we raise to £29/month. This is our way of rewarding the businesses that believe in us early. Once 100 seats are taken, this offer closes permanently." },
+  { q: "What's the Founder Member pricing?", a: "Pay once for your full audit report — no subscription, no recurring charges. Your £29 gives you the complete savings breakdown, every duplicate identified, cheaper alternatives named, and a week-by-week action plan." },
   { q: "Can I cancel anytime?", a: "Yes — no contracts, no notice period. Cancel in one click from your Stripe customer portal. We're confident the savings you find will more than justify the subscription, but you're never locked in." },
   { q: "Does this work for my industry?", a: "Yes. Any business that pays for software monthly has this problem — whether you're in construction, beauty, retail, professional services, or e-commerce. The AI adapts its analysis to your specific stack." },
 ];
@@ -42,7 +42,7 @@ export default function Home() {
       {/* Founder banner */}
       <div style={{ background: "rgba(52,211,153,0.12)", borderBottom: "1px solid rgba(52,211,153,0.2)", padding: "10px 24px", textAlign: "center" }}>
         <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: "13px", color: c.green }}>
-          🎯 <strong>Founder Member Offer:</strong> First 100 customers lock in £19/month forever — price rises to £29/month after that.
+          🎯 <strong>No subscription needed.</strong> Get your full audit report for a one-time payment of £29 — no recurring charges ever.
           <Link href="/audit" style={{ color: "#fff", marginLeft: "12px", textDecoration: "underline", fontWeight: 600 }}>Claim your spot →</Link>
         </span>
       </div>
@@ -50,7 +50,7 @@ export default function Home() {
       {/* Nav */}
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", maxWidth: "1100px", margin: "0 auto", flexWrap: "wrap", gap: "12px" }}>
         <Link href="/">
-          <img src="/logo.svg" alt="SaaS Auditor Pro" style={{ height: "100px", width: "auto" }} />
+          <img src="/logo.svg" alt="SaaS Auditor Pro" style={{ height: "36px", width: "auto" }} />
         </Link>
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
           <Link href="#how" className="nav-link" style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, textDecoration: "none" }}>How it works</Link>
@@ -143,8 +143,8 @@ export default function Home() {
       {/* Pricing */}
       <section id="pricing" style={{ maxWidth: "800px", margin: "0 auto", padding: "0 24px 80px" }}>
         <div style={{ textAlign: "center", marginBottom: "40px" }}>
-          <h2 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 4vw, 40px)", color: c.text, letterSpacing: "-1px", marginBottom: "12px" }}>Pricing that pays for itself</h2>
-          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, fontSize: "16px" }}>Find more in savings than you spend on the tool — or cancel anytime.</p>
+          <h2 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "clamp(28px, 4vw, 40px)", color: c.text, letterSpacing: "-1px", marginBottom: "12px" }}>Simple pricing. Real savings.</h2>
+          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, fontSize: "16px" }}>Find more in savings than you spend on the audit — or it costs you nothing to find out.</p>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "20px" }}>
@@ -161,21 +161,18 @@ export default function Home() {
             <Link href="/audit" style={{ display: "block", textAlign: "center", border: `1px solid ${c.cardBorder}`, color: c.sub, padding: "11px", borderRadius: "8px", textDecoration: "none", fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "13px" }}>Get Free Snapshot</Link>
           </div>
 
-          {/* Basic */}
+          {/* Single Audit */}
           <div style={{ position: "relative", background: "rgba(52,211,153,0.05)", border: `1px solid ${c.greenBorder}`, borderRadius: "18px", padding: "28px 24px" }}>
-            <div style={{ position: "absolute", top: "-13px", left: "50%", transform: "translateX(-50%)", background: c.green, color: "#000", fontSize: "11px", fontFamily: "Syne, sans-serif", fontWeight: 700, padding: "4px 14px", borderRadius: "100px", whiteSpace: "nowrap" }}>FOUNDER PRICE</div>
-            <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, color: c.green, fontSize: "13px", letterSpacing: "1px", marginBottom: "8px" }}>BASIC</div>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "8px", marginBottom: "4px" }}>
-              <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "36px", color: c.green, letterSpacing: "-1px" }}>£19</div>
-              <div style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "14px", textDecoration: "line-through" }}>£29</div>
-            </div>
-            <div style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "13px", marginBottom: "24px" }}>per month · first 100 only</div>
+            <div style={{ position: "absolute", top: "-13px", left: "50%", transform: "translateX(-50%)", background: c.green, color: "#000", fontSize: "11px", fontFamily: "Syne, sans-serif", fontWeight: 700, padding: "4px 14px", borderRadius: "100px", whiteSpace: "nowrap" }}>MOST POPULAR</div>
+            <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, color: c.green, fontSize: "13px", letterSpacing: "1px", marginBottom: "8px" }}>FULL AUDIT</div>
+            <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "36px", color: c.green, letterSpacing: "-1px", marginBottom: "4px" }}>£29</div>
+            <div style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "13px", marginBottom: "24px" }}>one-time payment · no subscription</div>
             <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px" }}>
-              {["✓ Unlimited full audits", "✓ Complete savings breakdown", "✓ Week-by-week action plan", "✓ Cheaper alternatives named", "✓ Locked-in founder price"].map((f, i) => (
+              {["✓ Complete savings breakdown", "✓ Every duplicate identified", "✓ Cheaper alternatives named", "✓ Week-by-week action plan", "✓ One-time, no recurring charge"].map((f, i) => (
                 <li key={i} style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, padding: "5px 0" }}>{f}</li>
               ))}
             </ul>
-            <Link href="/checkout" style={{ display: "block", textAlign: "center", background: c.green, color: "#000", padding: "13px", borderRadius: "8px", textDecoration: "none", fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "14px", boxShadow: "0 0 30px rgba(52,211,153,0.2)" }}>Lock In Founder Price →</Link>
+            <Link href="/checkout" style={{ display: "block", textAlign: "center", background: c.green, color: "#000", padding: "13px", borderRadius: "8px", textDecoration: "none", fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "14px", boxShadow: "0 0 30px rgba(52,211,153,0.2)" }}>Get My Full Report →</Link>
           </div>
 
           {/* Pro coming soon */}
@@ -184,7 +181,7 @@ export default function Home() {
             <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "36px", color: c.text, marginBottom: "4px", letterSpacing: "-1px" }}>£39</div>
             <div style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "13px", marginBottom: "24px" }}>per month · coming soon</div>
             <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px" }}>
-              {["✓ Everything in Basic", "✓ Monthly auto-monitoring", "✓ Renewal alerts", "✓ Price increase notifications", "✓ Saved subscription stack"].map((f, i) => (
+              {["✓ Unlimited full audits", "✓ Monthly auto-monitoring", "✓ Renewal alerts", "✓ Price increase notifications", "✓ Saved subscription stack"].map((f, i) => (
                 <li key={i} style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.sub, padding: "5px 0" }}>{f}</li>
               ))}
             </ul>
@@ -193,7 +190,7 @@ export default function Home() {
         </div>
 
         <p style={{ textAlign: "center", fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px" }}>
-          Founder pricing locked forever as long as you stay subscribed · Cancel anytime · No contracts
+          One-time payment · No subscription · No hidden charges
         </p>
       </section>
 
@@ -228,7 +225,7 @@ export default function Home() {
           <Link href="/audit" style={{ display: "inline-flex", alignItems: "center", gap: "10px", background: c.green, color: "#000", fontFamily: "Syne, sans-serif", fontWeight: 700, padding: "17px 36px", borderRadius: "12px", fontSize: "17px", textDecoration: "none", boxShadow: "0 0 60px rgba(52,211,153,0.2)" }}>
             Get My Free Snapshot →
           </Link>
-          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px", marginTop: "16px" }}>First 100 founder members · £19/month locked forever</p>
+          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px", marginTop: "16px" }}>One-time payment · No subscription · No hidden charges</p>
         </div>
       </section>
 
@@ -258,7 +255,7 @@ export default function Home() {
         </div>
         <div style={{ maxWidth: "1000px", margin: "24px auto 0", paddingTop: "24px", borderTop: `1px solid ${c.cardBorder}`, display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "12px" }}>
           <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px" }}>© 2026 SaaS Auditor Pro · Registered in England & Wales</p>
-          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px" }}>Questions? hello@saasauditorpro.com</p>
+          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px" }}>Questions? saasauditorpro@gmail.com</p>
         </div>
       </footer>
     </main>
