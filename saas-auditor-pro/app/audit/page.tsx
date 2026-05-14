@@ -38,6 +38,8 @@ export default function AuditPage() {
   const [error, setError] = useState("");
   const [showDemo, setShowDemo] = useState(false);
 
+  const [reportSummary, setReportSummary] = useState<any>(null);
+
   const isDemoMode = demoPassword === DEMO_PASSWORD;
 
   const runAudit = async () => {
@@ -54,6 +56,14 @@ export default function AuditPage() {
         setError(data.error);
       } else if (isDemoMode) {
         setReport(data.report);
+        // Also get summary numbers for the report header
+        const snapRes = await fetch("/api/audit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ subscriptions, email, isPro: false })
+        });
+        const snapData = await snapRes.json();
+        if (snapData.teaser) setReportSummary(snapData.teaser);
       } else {
         setTeaser(data.teaser);
       }
@@ -73,7 +83,7 @@ export default function AuditPage() {
     <main style={{ minHeight: "100vh", background: c.bg }}>
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 40px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/" style={{ textDecoration: "none" }}>
-          <img src="/logo.svg" alt="SaaS Auditor Pro" style={{ height: "100px", width: "auto" }} />
+          <img src="/logo.svg" alt="SaaS Auditor Pro" style={{ height: "52px", width: "auto" }} />
         </Link>
         <Link href="/checkout" style={{ fontSize: "13px", background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.3)", color: c.green, padding: "8px 16px", borderRadius: "8px", textDecoration: "none", fontFamily: "DM Sans, sans-serif" }}>Upgrade →</Link>
       </nav>
@@ -190,18 +200,34 @@ export default function AuditPage() {
           </>
         ) : (
           <>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "32px", flexWrap: "wrap", gap: "12px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px", flexWrap: "wrap", gap: "12px" }}>
               <h2 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "28px", color: c.text, letterSpacing: "-0.5px" }}>Your Full Audit Report</h2>
               {isDemoMode && <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: "12px", color: "#60a5fa", background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.2)", padding: "4px 12px", borderRadius: "100px" }}>Demo Mode</span>}
             </div>
+
+            {reportSummary && (
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "32px" }}>
+                <div style={{ background: c.card, border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", padding: "24px" }}>
+                  <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: "12px", color: c.dim, letterSpacing: "1px", marginBottom: "8px" }}>MONTHLY SPEND</div>
+                  <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "40px", color: c.text }}>£{reportSummary.totalMonthly}</div>
+                </div>
+                <div style={{ background: "rgba(52,211,153,0.05)", border: `1px solid ${c.greenBorder}`, borderRadius: "16px", padding: "24px" }}>
+                  <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: "12px", color: c.green, letterSpacing: "1px", marginBottom: "8px" }}>POTENTIAL SAVING</div>
+                  <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "40px", color: c.green }}>£{reportSummary.annualSaving}/yr</div>
+                </div>
+              </div>
+            )}
             <div
               dangerouslySetInnerHTML={{ __html: renderedReport }}
               style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, lineHeight: 1.8, fontSize: "15px" }}
             />
-            <div style={{ marginTop: "40px", textAlign: "center" }}>
-              <button onClick={() => { setReport(""); setTeaser(null); setSubscriptions(""); }} style={{ background: "none", border: `1px solid rgba(255,255,255,0.1)`, color: c.sub, fontFamily: "DM Sans, sans-serif", fontSize: "14px", padding: "10px 24px", borderRadius: "8px", cursor: "pointer" }}>
+            <div style={{ marginTop: "40px", textAlign: "center", display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap" }}>
+              <button onClick={() => { setReport(""); setTeaser(null); setSubscriptions(""); setReportSummary(null); }} style={{ background: "none", border: `1px solid rgba(255,255,255,0.1)`, color: c.sub, fontFamily: "DM Sans, sans-serif", fontSize: "14px", padding: "10px 24px", borderRadius: "8px", cursor: "pointer" }}>
                 Run another audit
               </button>
+              <Link href="/" style={{ background: "none", border: `1px solid rgba(255,255,255,0.1)`, color: c.sub, fontFamily: "DM Sans, sans-serif", fontSize: "14px", padding: "10px 24px", borderRadius: "8px", textDecoration: "none", display: "inline-block" }}>
+                Back to home
+              </Link>
             </div>
           </>
         )}
