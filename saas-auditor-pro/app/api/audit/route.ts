@@ -67,7 +67,7 @@ SUMMARY_JSON:{"totalMonthly":<exact total monthly spend as integer>,"annualSavin
       
       if (jsonMatch) {
         try {
-          summary = JSON.parse(jsonMatch[1]);
+          summary = JSON.parse(jsonMatch[1] as string);
           report = jsonStart !== -1 ? fullText.slice(0, jsonStart).trim() : fullText.trim();
         } catch { summary = null; }
       }
