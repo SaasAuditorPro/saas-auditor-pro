@@ -5,7 +5,7 @@ const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-// Step 1: Calculate monthly spend precisely from the subscription list — no AI needed
+// Calculate monthly spend precisely from the subscription list — no AI needed
 function calculateMonthlySpend(subscriptions: string): { totalMonthly: number; toolCount: number } {
   const lines = subscriptions.trim().split("\n").filter((l: string) => l.trim());
   let totalMonthly = 0;
@@ -14,6 +14,13 @@ function calculateMonthlySpend(subscriptions: string): { totalMonthly: number; t
     if (match) totalMonthly += parseFloat(match[1]);
   });
   return { totalMonthly: Math.round(totalMonthly), toolCount: lines.length };
+}
+
+// Extract annual saving from report text — looks for ANNUAL_SAVING: line
+function extractAnnualSaving(report: string): number | null {
+  const match = report.match(/ANNUAL_SAVING:\s*(\d+)/);
+  if (match) return parseInt(match[1]);
+  return null;
 }
 
 export async function POST(req: NextRequest) {
@@ -25,33 +32,16 @@ export async function POST(req: NextRequest) {
     }
 
     if (isPro) {
-      // Step 1: Precise monthly spend from list
+      // Monthly spend calculated precisely from the list
       const { totalMonthly, toolCount } = calculateMonthlySpend(subscriptions);
 
-      // Steps 2 & 3: Run saving figure and full report in parallel
-      const [savingRes, reportRes] = await Promise.all([
-
-        // Step 2: AI returns only the annual saving figure as JSON
-        client.messages.create({
-          model: "claude-haiku-4-5-20251001",
-          max_tokens: 100,
-          messages: [{
-            role: "user",
-            content: `Analyse this subscription list. Return ONLY this JSON object with no markdown and no other text:
-{"annualSaving": <total annual saving in pounds as a whole number, based only on genuine duplicates and overlaps visible in the list>}
-
-SUBSCRIPTIONS:
-${subscriptions}`
-          }]
-        }),
-
-        // Step 3: Full detailed report
-        client.messages.create({
-          model: "claude-haiku-4-5-20251001",
-          max_tokens: 2500,
-          messages: [{
-            role: "user",
-            content: `You are a SaaS cost optimisation expert. Analyse this list of software subscriptions and produce a clear savings report.
+      // Single AI call for the full report
+      const reportRes = await client.messages.create({
+        model: "claude-haiku-4-5-20251001",
+        max_tokens: 2500,
+        messages: [{
+          role: "user",
+          content: `You are a SaaS cost optimisation expert. Analyse this list of software subscriptions and produce a clear savings report.
 SUBSCRIPTIONS:
 ${subscriptions}
 
@@ -74,22 +64,18 @@ IMPORTANT RULES:
 - Do NOT recommend any subscription management, spend tracking, or SaaS auditing tools
 - Do NOT make up or hallucinate any tool names or products
 - Only base your analysis on what is actually in the subscription list provided
-- Do not add generic advice about ongoing monitoring tools`
-          }]
-        })
+- Do not add generic advice about ongoing monitoring tools
 
-      ]);
+At the very end of your response on its own line write exactly this with the real number:
+ANNUAL_SAVING: [total annual saving as integer with no symbols or commas]`
+        }]
+      });
 
-      // Extract annual saving from JSON response
-      const savingText = savingRes.content[0].type === "text" ? savingRes.content[0].text : "{}";
-      let annualSaving = null;
-      try {
-        const clean = savingText.replace(/```json|```/g, "").trim();
-        const parsed = JSON.parse(clean);
-        annualSaving = parsed.annualSaving || null;
-      } catch { annualSaving = null; }
+      const fullText = reportRes.content[0].type === "text" ? reportRes.content[0].text : "";
 
-      const report = reportRes.content[0].type === "text" ? reportRes.content[0].text : "";
+      // Extract annual saving from the report and strip the tag from display
+      const annualSaving = extractAnnualSaving(fullText);
+      const report = fullText.replace(/ANNUAL_SAVING:\s*\d+/g, "").trim();
 
       return NextResponse.json({
         report,
@@ -98,30 +84,41 @@ IMPORTANT RULES:
       });
 
     } else {
-      // Free snapshot
+      // Free snapshot — calculate monthly spend from list, AI provides waste analysis
+      const { totalMonthly, toolCount } = calculateMonthlySpend(subscriptions);
+
       const message = await client.messages.create({
         model: "claude-haiku-4-5-20251001",
-        max_tokens: 300,
+        max_tokens: 200,
         messages: [{
           role: "user",
-          content: `You are a SaaS cost optimisation expert. Analyse this list of software subscriptions honestly and identify real waste only.
-SUBSCRIPTIONS:
-${subscriptions}
-Return ONLY a JSON object with no markdown, no backticks:
+          content: `Analyse this subscription list honestly. Return ONLY a JSON object with no markdown, no backticks:
 {
-  "totalMonthly": <total monthly spend as number>,
-  "wastePct": <number only, genuine waste percentage based on actual duplicates and overlaps you can see>,
-  "annualSaving": <estimated annual saving as number>,
-  "toolCount": <number of subscriptions>,
-  "biggestWaste": "<name of single biggest waste tool>"
-}`
+  "wastePct": <genuine waste percentage as integer, based only on actual duplicates and overlaps you can see>,
+  "annualSaving": <estimated annual saving as integer>,
+  "biggestWaste": "<name of single biggest waste tool or overlap>"
+}
+
+SUBSCRIPTIONS:
+${subscriptions}`
         }]
       });
+
       const text = message.content[0].type === "text" ? message.content[0].text : "{}";
       const clean = text.replace(/```json|```/g, "").trim();
       try {
         const data = JSON.parse(clean);
-        return NextResponse.json({ teaser: data, isPro: false });
+        // Use precise monthly spend from list, not AI estimate
+        return NextResponse.json({
+          teaser: {
+            totalMonthly,
+            toolCount,
+            wastePct: data.wastePct,
+            annualSaving: data.annualSaving,
+            biggestWaste: data.biggestWaste
+          },
+          isPro: false
+        });
       } catch {
         return NextResponse.json({ error: "Failed to parse analysis" }, { status: 500 });
       }
