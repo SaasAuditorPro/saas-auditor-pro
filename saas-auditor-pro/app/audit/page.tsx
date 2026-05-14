@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { marked } from "marked";
 
@@ -29,6 +30,9 @@ const c = {
 };
 
 export default function AuditPage() {
+  const searchParams = useSearchParams();
+  const isPaidCustomer = searchParams.get("paid") === "true";
+
   const [subscriptions, setSubscriptions] = useState("");
   const [email, setEmail] = useState("");
   const [demoPassword, setDemoPassword] = useState("");
@@ -37,10 +41,10 @@ export default function AuditPage() {
   const [report, setReport] = useState("");
   const [error, setError] = useState("");
   const [showDemo, setShowDemo] = useState(false);
-
   const [reportSummary, setReportSummary] = useState<any>(null);
 
   const isDemoMode = demoPassword === DEMO_PASSWORD;
+  const isProUser = isDemoMode || isPaidCustomer;
 
   const runAudit = async () => {
     if (!subscriptions.trim()) { setError("Please paste your subscriptions first."); return; }
@@ -49,12 +53,12 @@ export default function AuditPage() {
       const res = await fetch("/api/audit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subscriptions, email, isPro: isDemoMode })
+        body: JSON.stringify({ subscriptions, email, isPro: isProUser })
       });
       const data = await res.json();
       if (data.error) {
         setError(data.error);
-      } else if (isDemoMode) {
+      } else if (isProUser) {
         setReport(data.report);
         if (data.summary) setReportSummary(data.summary);
       } else {
@@ -76,12 +80,21 @@ export default function AuditPage() {
     <main style={{ minHeight: "100vh", background: c.bg }}>
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 40px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/" style={{ textDecoration: "none" }}>
-          <img src="/logo.svg" alt="SaaS Auditor Pro" style={{ height: "52px", width: "auto" }} />
+          <img src="/logo.svg" alt="SaaS Auditor Pro" style={{ height: "100px", width: "auto" }} />
         </Link>
-        <Link href="/checkout" style={{ fontSize: "13px", background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.3)", color: c.green, padding: "8px 16px", borderRadius: "8px", textDecoration: "none", fontFamily: "DM Sans, sans-serif" }}>Upgrade →</Link>
+        {!isProUser && (
+          <Link href="/checkout" style={{ fontSize: "13px", background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.3)", color: c.green, padding: "8px 16px", borderRadius: "8px", textDecoration: "none", fontFamily: "DM Sans, sans-serif" }}>Upgrade →</Link>
+        )}
       </nav>
 
       <div style={{ maxWidth: "760px", margin: "0 auto", padding: "48px 32px" }}>
+
+        {/* Paid customer welcome */}
+        {isPaidCustomer && !report && !teaser && (
+          <div style={{ background: "rgba(52,211,153,0.06)", border: `1px solid ${c.greenBorder}`, borderRadius: "12px", padding: "16px 20px", marginBottom: "24px" }}>
+            <p style={{ fontFamily: "DM Sans, sans-serif", fontSize: "14px", color: c.green, margin: 0 }}>✓ Basic plan active — paste your subscriptions to run your full audit</p>
+          </div>
+        )}
 
         {/* Demo mode toggle */}
         <div style={{ textAlign: "right", marginBottom: "12px" }}>
@@ -140,7 +153,7 @@ export default function AuditPage() {
               disabled={loading}
               style={{ width: "100%", background: c.green, color: "#000", fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "16px", padding: "16px", borderRadius: "12px", border: "none", cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.7 : 1 }}
             >
-              {loading ? "Analysing your stack..." : isDemoMode ? "Run Full Demo Audit →" : "Run My Free Audit →"}
+              {loading ? "Analysing your stack..." : isProUser ? "Run Full Audit →" : "Run My Free Audit →"}
             </button>
           </>
         ) : teaser ? (
@@ -206,10 +219,11 @@ export default function AuditPage() {
                 </div>
                 <div style={{ background: "rgba(52,211,153,0.05)", border: `1px solid ${c.greenBorder}`, borderRadius: "16px", padding: "24px" }}>
                   <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: "12px", color: c.green, letterSpacing: "1px", marginBottom: "8px" }}>POTENTIAL SAVING</div>
-                  <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "40px", color: c.green }}>£{reportSummary.annualSaving}/yr</div>
+                  <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "40px", color: c.green }}>{reportSummary.annualSaving ? `£${reportSummary.annualSaving}/yr` : "See report ↓"}</div>
                 </div>
               </div>
             )}
+
             <div
               dangerouslySetInnerHTML={{ __html: renderedReport }}
               style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, lineHeight: 1.8, fontSize: "15px" }}
