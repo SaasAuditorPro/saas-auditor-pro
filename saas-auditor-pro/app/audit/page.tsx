@@ -83,7 +83,7 @@ export default function AuditPage() {
     <main style={{ minHeight: "100vh", background: c.bg }}>
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 40px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/" style={{ textDecoration: "none" }}>
-          <img src="/logo.svg" alt="SaaS Auditor Pro" style={{ height: "52px", width: "auto" }} />
+          <img src="/logo.svg" alt="SaaS Auditor Pro" style={{ height: "100px", width: "auto" }} />
         </Link>
         <Link href="/checkout" style={{ fontSize: "13px", background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.3)", color: c.green, padding: "8px 16px", borderRadius: "8px", textDecoration: "none", fontFamily: "DM Sans, sans-serif" }}>Upgrade →</Link>
       </nav>
