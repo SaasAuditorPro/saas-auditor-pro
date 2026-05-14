@@ -3,6 +3,20 @@ import { NextRequest, NextResponse } from "next/server";
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
+
+function calculateSummary(subscriptions: string) {
+  const lines = subscriptions.trim().split("\n").filter(l => l.trim());
+  let totalMonthly = 0;
+  const toolCount = lines.length;
+
+  lines.forEach(line => {
+    const match = line.match(/£(\d+(?:\.\d+)?)/);
+    if (match) totalMonthly += parseFloat(match[1]);
+  });
+
+  return { totalMonthly: Math.round(totalMonthly), toolCount };
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { subscriptions, isPro } = await req.json();
@@ -41,7 +55,21 @@ IMPORTANT RULES:
         }]
       });
       const report = message.content[0].type === "text" ? message.content[0].text : "";
-      return NextResponse.json({ report, isPro: true });
+      
+      // Calculate summary directly from the subscription list — no second AI call
+      const { totalMonthly, toolCount } = calculateSummary(subscriptions);
+
+      // Extract annual saving from the report text
+      const savingMatch = report.match(/annual saving[^£]*£([\d,]+)/i) || 
+                          report.match(/£([\d,]+).*?per year/i) ||
+                          report.match(/£([\d,]+)\/year/i);
+      const annualSaving = savingMatch ? parseInt(savingMatch[1].replace(/,/g, "")) : Math.round(totalMonthly * 0.25 * 12);
+
+      return NextResponse.json({ 
+        report, 
+        isPro: true,
+        summary: { totalMonthly, toolCount, annualSaving }
+      });
     } else {
       const message = await client.messages.create({
         model: "claude-haiku-4-5-20251001",
@@ -63,8 +91,12 @@ Return ONLY a JSON object with no markdown, no backticks:
       });
       const text = message.content[0].type === "text" ? message.content[0].text : "{}";
       const clean = text.replace(/```json|```/g, "").trim();
-      const data = JSON.parse(clean);
-      return NextResponse.json({ teaser: data, isPro: false });
+      try {
+        const data = JSON.parse(clean);
+        return NextResponse.json({ teaser: data, isPro: false });
+      } catch {
+        return NextResponse.json({ error: "Failed to parse analysis" }, { status: 500 });
+      }
     }
   } catch (error) {
     console.error(error);
