@@ -60,14 +60,15 @@ SUMMARY_JSON:{"totalMonthly":<exact total monthly spend as integer>,"annualSavin
       const fullText = message.content[0].type === "text" ? message.content[0].text : "";
       
       // Split report from summary JSON
-      const jsonMatch = fullText.match(/SUMMARY_JSON:(\{.*?\})/s);
+      const jsonStart = fullText.indexOf('SUMMARY_JSON:');
+      const jsonMatch = jsonStart !== -1 ? [null, fullText.slice(jsonStart + 13, fullText.indexOf('}', jsonStart) + 1)] : null;
       let summary = null;
       let report = fullText;
       
       if (jsonMatch) {
         try {
           summary = JSON.parse(jsonMatch[1]);
-          report = fullText.replace(/SUMMARY_JSON:\{.*?\}/s, "").trim();
+          report = jsonStart !== -1 ? fullText.slice(0, jsonStart).trim() : fullText.trim();
         } catch { summary = null; }
       }
 
