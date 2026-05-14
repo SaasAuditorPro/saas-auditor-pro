@@ -51,25 +51,27 @@ IMPORTANT RULES:
 - Do NOT recommend any subscription management, spend tracking, or SaaS auditing tools
 - Do NOT make up or hallucinate any tool names or products
 - Only base your analysis on what is actually in the subscription list provided
-- Do not add generic advice about ongoing monitoring tools`
+- Do not add generic advice about ongoing monitoring tools
+
+At the very end of your response, after all sections, append this exact line with real numbers:
+SUMMARY_JSON:{"totalMonthly":<exact total monthly spend as integer>,"annualSaving":<total annual saving from all cuts as integer>,"wastePct":<waste percentage as integer>}`
         }]
       });
-      const report = message.content[0].type === "text" ? message.content[0].text : "";
+      const fullText = message.content[0].type === "text" ? message.content[0].text : "";
       
-      // Calculate summary directly from the subscription list — no second AI call
-      const { totalMonthly, toolCount } = calculateSummary(subscriptions);
+      // Split report from summary JSON
+      const jsonMatch = fullText.match(/SUMMARY_JSON:(\{.*?\})/s);
+      let summary = null;
+      let report = fullText;
+      
+      if (jsonMatch) {
+        try {
+          summary = JSON.parse(jsonMatch[1]);
+          report = fullText.replace(/SUMMARY_JSON:\{.*?\}/s, "").trim();
+        } catch { summary = null; }
+      }
 
-      // Extract annual saving from the report text
-      const savingMatch = report.match(/annual saving[^£]*£([\d,]+)/i) || 
-                          report.match(/£([\d,]+).*?per year/i) ||
-                          report.match(/£([\d,]+)\/year/i);
-      const annualSaving = savingMatch ? parseInt(savingMatch[1].replace(/,/g, "")) : Math.round(totalMonthly * 0.25 * 12);
-
-      return NextResponse.json({ 
-        report, 
-        isPro: true,
-        summary: { totalMonthly, toolCount, annualSaving }
-      });
+      return NextResponse.json({ report, isPro: true, summary });
     } else {
       const message = await client.messages.create({
         model: "claude-haiku-4-5-20251001",
