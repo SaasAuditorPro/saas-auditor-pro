@@ -211,9 +211,9 @@ function AuditPageInner() {
               <h3 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "24px", color: c.green, marginBottom: "8px" }}>£{teaser?.annualSaving} waiting for you</h3>
               <p style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, fontSize: "14px", marginBottom: "24px" }}>Unlock your full report to see exactly what to cut, what to replace, and your week-by-week action plan.</p>
               <button onClick={goToCheckout} style={{ display: "inline-block", background: c.green, color: "#000", fontFamily: "Syne, sans-serif", fontWeight: 700, padding: "14px 32px", borderRadius: "10px", border: "none", cursor: "pointer", fontSize: "16px", boxShadow: "0 0 40px rgba(52,211,153,0.3)" }}>
-                Unlock Full Report — £19/mo →
+                Get My Full Report — £29 →
               </button>
-              <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px", marginTop: "12px" }}>Cancel anytime · Pays for itself in week 1</p>
+              <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px", marginTop: "12px" }}>One-time payment · No subscription · No hidden charges</p>
             </div>
           </>
         ) : (
