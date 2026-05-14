@@ -63,6 +63,18 @@ function AuditPageInner() {
         if (data.summary) setReportSummary(data.summary);
       } else {
         setTeaser(data.teaser);
+        // Send email to Brevo with savings figure if email provided
+        if (email && data.teaser) {
+          fetch("/api/subscribe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email,
+              annualSaving: data.teaser.annualSaving,
+              totalMonthly: data.teaser.totalMonthly
+            })
+          });
+        }
       }
     } catch { setError("Something went wrong. Please try again."); }
     finally { setLoading(false); }
