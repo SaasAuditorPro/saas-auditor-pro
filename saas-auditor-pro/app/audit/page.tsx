@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { marked } from "marked";
@@ -29,7 +29,7 @@ const c = {
   dim: "#475569",
 };
 
-export default function AuditPage() {
+function AuditPageInner() {
   const searchParams = useSearchParams();
   const isPaidCustomer = searchParams.get("paid") === "true";
 
@@ -240,5 +240,13 @@ export default function AuditPage() {
         )}
       </div>
     </main>
+  );
+}
+
+export default function AuditPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: "100vh", background: "#080c10" }} />}>
+      <AuditPageInner />
+    </Suspense>
   );
 }
