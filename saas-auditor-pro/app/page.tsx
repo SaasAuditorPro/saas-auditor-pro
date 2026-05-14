@@ -258,7 +258,7 @@ export default function Home() {
         </div>
         <div style={{ maxWidth: "1000px", margin: "24px auto 0", paddingTop: "24px", borderTop: `1px solid ${c.cardBorder}`, display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "12px" }}>
           <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px" }}>© 2026 SaaS Auditor Pro · Registered in England & Wales</p>
-          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px" }}>Questions? saasauditorpro@gmail.com</p>
+          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px" }}>Questions? hello@saasauditorpro.com</p>
         </div>
       </footer>
     </main>
