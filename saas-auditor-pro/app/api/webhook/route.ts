@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       // Email A: Purchase confirmation
       await sendEmail(
         customerEmail,
-        "You're in — SaaS Auditor Pro Basic ✅",
+        "Your audit report is ready ✅",
         `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #050b14; color: #f1f5f9; padding: 40px 32px; border-radius: 16px;">
           <div style="margin-bottom: 32px;">
@@ -54,33 +54,35 @@ export async function POST(req: NextRequest) {
             <span style="color: #475569; font-weight: 800; font-size: 20px;">Pro</span>
           </div>
           
-          <h1 style="color: #34d399; font-size: 28px; font-weight: 800; margin-bottom: 16px;">You're on Basic — welcome aboard.</h1>
+          <h1 style="color: #34d399; font-size: 28px; font-weight: 800; margin-bottom: 16px;">Your full report is unlocked. Let's find your savings.</h1>
           
           <p style="color: #94a3b8; font-size: 16px; line-height: 1.7; margin-bottom: 24px;">
-            Your founder member price of <strong style="color: #f1f5f9;">£19/month</strong> is now locked in forever. Even when we raise the price, yours stays the same.
+            You now have access to your full audit report — paste your subscriptions and see exactly where your money is going.
           </p>
 
           <div style="background: #0c1525; border: 1px solid rgba(52,211,153,0.25); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
             <p style="color: #94a3b8; font-size: 14px; margin: 0 0 8px;">What you've unlocked:</p>
             <ul style="color: #f1f5f9; font-size: 15px; line-height: 1.8; margin: 0; padding-left: 20px;">
-              <li>Unlimited full audits</li>
               <li>Complete savings breakdown</li>
-              <li>Week-by-week action plan</li>
+              <li>Every duplicate identified</li>
               <li>Cheaper alternatives named</li>
-              <li>Locked-in founder price forever</li>
+              <li>Week-by-week action plan</li>
+              <li>One-time payment — no recurring charges</li>
             </ul>
           </div>
 
           <a href="https://saasauditorpro.com/audit?paid=true" style="display: inline-block; background: #34d399; color: #000; font-weight: 700; font-size: 16px; padding: 14px 32px; border-radius: 10px; text-decoration: none; margin-bottom: 32px;">
-            Run Your First Audit →
+            Run My Full Audit →
           </a>
 
           <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 32px 0;" />
 
+          <div style="background: rgba(96,165,250,0.06); border: 1px solid rgba(96,165,250,0.15); border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+            <p style="color: #f1f5f9; font-size: 15px; font-weight: 700; margin: 0 0 8px;">One quick question 👋</p>
+            <p style="color: #94a3b8; font-size: 14px; line-height: 1.7; margin: 0;">What would make you want to keep using this every month? Just hit reply — I read every response personally.</p>
+          </div>
+
           <p style="color: #475569; font-size: 13px; line-height: 1.6;">
-            Need to manage your subscription, update payment details or cancel? 
-            <a href="https://billing.stripe.com/p/login/6oUdRa0lrdp2251aI92VG00" style="color: #34d399;">Access your billing portal here</a>.
-            <br /><br />
             Questions? Reply to this email or contact us at hello@saasauditorpro.com
           </p>
         </div>
