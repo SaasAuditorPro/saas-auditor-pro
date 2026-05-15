@@ -2,9 +2,22 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, annualSaving, totalMonthly } = await req.json();
+    const { email, annualSaving, totalMonthly, recaptchaToken } = await req.json();
 
     if (!email) return NextResponse.json({ error: "No email provided" }, { status: 400 });
+
+    // Verify reCAPTCHA token if provided
+    if (recaptchaToken) {
+      const recaptchaRes = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`
+      });
+      const recaptchaData = await recaptchaRes.json();
+      if (!recaptchaData.success || recaptchaData.score < 0.5) {
+        return NextResponse.json({ error: "reCAPTCHA verification failed" }, { status: 400 });
+      }
+    }
 
     // Add to Brevo contact list
     const listRes = await fetch("https://api.brevo.com/v3/contacts", {
