@@ -2,6 +2,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Script from "next/script";
 import { marked } from "marked";
 
 const PLACEHOLDER = `Slack - £12/month
@@ -65,14 +66,20 @@ function AuditPageInner() {
         setTeaser(data.teaser);
         // Send email to Brevo with savings figure if email provided
         if (email && data.teaser) {
-          fetch("/api/subscribe", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email,
-              annualSaving: data.teaser.annualSaving,
-              totalMonthly: data.teaser.totalMonthly
-            })
+          // Get reCAPTCHA token
+          window.grecaptcha.ready(() => {
+            window.grecaptcha.execute("6Lcos-ssAAAAALz_axptHfr84Nu-k8QMUk7QG20j", { action: "subscribe" }).then(token => {
+              fetch("/api/subscribe", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  email,
+                  annualSaving: data.teaser.annualSaving,
+                  totalMonthly: data.teaser.totalMonthly,
+                  recaptchaToken: token
+                })
+              });
+            });
           });
         }
       }
@@ -89,7 +96,9 @@ function AuditPageInner() {
   const renderedReport = report ? marked(report) as string : "";
 
   return (
-    <main style={{ minHeight: "100vh", background: c.bg }}>
+    <>
+      <Script src="https://www.google.com/recaptcha/api.js" async defer></Script>
+      <main style={{ minHeight: "100vh", background: c.bg }}>
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 40px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/" style={{ textDecoration: "none" }}>
           <img src="/logo.svg" alt="SaaS Auditor Pro" style={{ height: "100px", width: "auto" }} />
@@ -272,6 +281,7 @@ function AuditPageInner() {
         )}
       </div>
     </main>
+    </>
   );
 }
 
