@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
           </p>
 
           <p style="color: #94a3b8; font-size: 15px; line-height: 1.7; margin-bottom: 32px;">
-            Unlock your full report for <strong style="color: #f1f5f9;">£19/month</strong> — and recover your first month's cost in week one.
+            Unlock your full report for <strong style="color: #f1f5f9;">£29 one-time</strong> — no subscription, no recurring charges.
           </p>
 
           <a href="https://saasauditorpro.com/audit" style="display: inline-block; background: #34d399; color: #000; font-weight: 700; font-size: 16px; padding: 14px 32px; border-radius: 10px; text-decoration: none; margin-bottom: 32px;">
