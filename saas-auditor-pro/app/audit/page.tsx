@@ -5,6 +5,12 @@ import Link from "next/link";
 import Script from "next/script";
 import { marked } from "marked";
 
+declare global {
+  interface Window {
+    grecaptcha: any;
+  }
+}
+
 const PLACEHOLDER = `Slack - £12/month
 Notion - £16/month
 Asana - £25/month
