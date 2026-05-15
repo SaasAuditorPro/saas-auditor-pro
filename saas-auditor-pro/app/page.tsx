@@ -68,7 +68,7 @@ export default function Home() {
         </div>
 
         <h1 style={{ fontFamily: "Playfair Display, serif", fontWeight: 800, fontSize: "clamp(38px, 7vw, 72px)", lineHeight: 1.06, letterSpacing: "-2.5px", color: c.text, marginBottom: "28px" }}>
-          UK businesses are losing<br />
+          Small businesses are losing<br />
           <span style={{ color: c.green }}>money every month</span><br />
           on software waste.
         </h1>
@@ -83,7 +83,7 @@ export default function Home() {
         <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "13px", marginTop: "16px" }}>No bank connection · No account needed · Free forever</p>
 
         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "12px", marginTop: "40px" }}>
-          {["No bank access required", "Built for UK businesses", "30-second results", "Your data stays private"].map(t => (
+          {["No bank access required", "For small businesses worldwide", "30-second results", "Your data stays private"].map(t => (
             <span key={t} style={{ fontFamily: "DM Sans, sans-serif", fontSize: "13px", color: c.dim, padding: "6px 16px", borderRadius: "100px", border: "1px solid rgba(255,255,255,0.06)" }}>{t}</span>
           ))}
         </div>
@@ -226,7 +226,7 @@ export default function Home() {
         <div style={{ maxWidth: "1000px", margin: "0 auto", display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "32px" }}>
           <div>
             <img src="/logo.svg" alt="SaaS Auditor Pro" style={{ height: "32px", width: "auto", marginBottom: "12px" }} />
-            <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "13px", maxWidth: "240px", lineHeight: 1.7 }}>AI-powered software spend auditing for UK small businesses.</p>
+            <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "13px", maxWidth: "240px", lineHeight: 1.7 }}>AI-powered software spend auditing for small businesses worldwide.</p>
           </div>
           <div style={{ display: "flex", gap: "48px", flexWrap: "wrap" }}>
             <div>
