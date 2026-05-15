@@ -74,7 +74,7 @@ function AuditPageInner() {
         if (email && data.teaser) {
           // Get reCAPTCHA token
           window.grecaptcha.ready(() => {
-            window.grecaptcha.execute("6Lcos-ssAAAAALz_axptHfr84Nu-k8QMUk7QG20j", { action: "subscribe" }).then(token => {
+            window.grecaptcha.execute("6Lcos-ssAAAAALz_axptHfr84Nu-k8QMUk7QG20j", { action: "subscribe" }).then((token: string) => {
               fetch("/api/subscribe", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
