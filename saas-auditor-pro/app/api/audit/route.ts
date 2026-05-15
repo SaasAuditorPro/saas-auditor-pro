@@ -42,23 +42,42 @@ export async function POST(req: NextRequest) {
         messages: [{
           role: "user",
           content: `You are a SaaS cost optimisation expert. Analyse this list of software subscriptions and produce a clear savings report.
+IMPORTANT: The total monthly spend is exactly £${totalMonthly}. Use this figure throughout your report — do not recalculate it.
 SUBSCRIPTIONS:
 ${subscriptions}
 
-Produce a report with these sections:
-💰 ESTIMATED MONTHLY WASTE
-Calculate what percentage is waste/overlap and why.
-🔴 CUT IMMEDIATELY (highest priority savings)
-List subscriptions to cancel with exact monthly saving and reason.
-🟡 REPLACE WITH CHEAPER ALTERNATIVE
-List subscriptions that could be replaced with a cheaper tool. Name the alternative and the saving.
-🟢 OVERLAPPING TOOLS
-Identify tools that do the same thing — they are paying twice.
-📊 SUMMARY
-Total monthly saving and total annual saving.
-⚡ ACTION PLAN
-Week by week priority order of what to do.
-Be specific, direct, and give exact figures. Format clearly. No waffle.
+Produce a clean, professional audit report. No emoji. No markdown bold or headers with ##. No bullet points. Use plain section titles in capitals only.
+
+WASTE ANALYSIS
+Two to three sentences only. State the waste percentage, reference the exact monthly total provided, and name the main categories of waste.
+
+CUT IMMEDIATELY
+List each tool on its own line in this exact format:
+Tool name — £X/month — One sentence reason.
+
+REPLACE WITH CHEAPER ALTERNATIVE
+List each replacement on its own line in this exact format:
+Current tool £X/month — Replace with: Alternative — Save £X/month — One sentence reason.
+Only include alternatives you are certain exist and are genuinely cheaper.
+
+OVERLAPPING TOOLS
+Group by category. One short paragraph per category. State which tools overlap, which single tool to keep and why, and the monthly saving.
+
+SUMMARY
+Four lines only, no other text:
+Current monthly spend: £X
+Monthly saving: £X
+Annual saving: £X
+New monthly spend: £X
+
+ACTION PLAN
+Four lines only. One action per week:
+Week 1 — Action.
+Week 2 — Action.
+Week 3 — Action.
+Week 4 — Action.
+
+Be precise. Use the exact monthly total provided. No waffle. No emoji. No markdown.
 IMPORTANT RULES:
 - Only recommend alternatives you are 100% certain exist and are genuinely cheaper
 - Do NOT recommend any subscription management, spend tracking, or SaaS auditing tools
