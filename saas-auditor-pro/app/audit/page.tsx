@@ -236,9 +236,29 @@ function AuditPageInner() {
               </div>
             )}
 
+            <style>{`
+              .report-body { font-family: "DM Sans", sans-serif; color: #cbd5e1; line-height: 1.85; font-size: 15px; }
+              .report-body p { margin: 0 0 14px; color: #cbd5e1; }
+              .report-body h1, .report-body h2, .report-body h3 { 
+                font-family: "DM Sans", sans-serif;
+                font-size: 11px; 
+                font-weight: 600;
+                letter-spacing: 2px; 
+                text-transform: uppercase; 
+                color: #34d399;
+                margin: 32px 0 14px;
+                padding-top: 24px;
+                border-top: 1px solid rgba(52,211,153,0.2);
+              }
+              .report-body h1:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+              .report-body ul, .report-body ol { padding-left: 0; list-style: none; margin: 0 0 14px; }
+              .report-body li { color: #cbd5e1; margin-bottom: 10px; padding-left: 0; }
+              .report-body strong { color: #f1f5f9; font-weight: 600; }
+              .report-body hr { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 24px 0; }
+            `}</style>
             <div
               dangerouslySetInnerHTML={{ __html: renderedReport }}
-              style={{ fontFamily: "DM Sans, sans-serif", color: c.sub, lineHeight: 1.8, fontSize: "15px" }}
+              className="report-body"
             />
             <div style={{ marginTop: "40px", textAlign: "center", display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap" }}>
               <button onClick={() => { setReport(""); setTeaser(null); setSubscriptions(""); setReportSummary(null); }} style={{ background: "none", border: `1px solid rgba(255,255,255,0.1)`, color: c.sub, fontFamily: "DM Sans, sans-serif", fontSize: "14px", padding: "10px 24px", borderRadius: "8px", cursor: "pointer" }}>
