@@ -64,7 +64,7 @@ export default function Home() {
       <section style={{ maxWidth: "800px", margin: "0 auto", padding: "80px 32px 64px", textAlign: "center" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "rgba(96,165,250,0.06)", border: "1px solid rgba(96,165,250,0.15)", borderRadius: "100px", padding: "6px 18px", marginBottom: "32px" }}>
           <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: c.blue, display: "inline-block" }} />
-          <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: "12px", color: c.blue, letterSpacing: "0.8px", textTransform: "uppercase" }}>Built for UK Small Businesses</span>
+          <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: "12px", color: c.blue, letterSpacing: "0.8px", textTransform: "uppercase" }}>For Small Businesses Worldwide</span>
         </div>
 
         <h1 style={{ fontFamily: "Playfair Display, serif", fontWeight: 800, fontSize: "clamp(38px, 7vw, 72px)", lineHeight: 1.06, letterSpacing: "-2.5px", color: c.text, marginBottom: "28px" }}>
@@ -242,7 +242,7 @@ export default function Home() {
           </div>
         </div>
         <div style={{ maxWidth: "1000px", margin: "32px auto 0", paddingTop: "32px", borderTop: "1px solid rgba(255,255,255,0.04)", display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "12px" }}>
-          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px" }}>© 2026 SaaS Auditor Pro · Registered in England & Wales</p>
+          <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px" }}>© 2026 SaaS Auditor Pro · Global small business software auditing</p>
           <p style={{ fontFamily: "DM Sans, sans-serif", color: c.dim, fontSize: "12px" }}>Questions? hello@saasauditorpro.com</p>
         </div>
       </footer>
