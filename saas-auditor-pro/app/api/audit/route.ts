@@ -71,11 +71,37 @@ Annual saving: £X
 New monthly spend: £X
 
 ACTION PLAN
-Four lines only. One action per week:
-Week 1 — Action.
-Week 2 — Action.
-Week 3 — Action.
-Week 4 — Action.
+Write a specific day-by-day plan across four weeks. Each day must state exactly what to do, how to do it, and why. Reference the actual tools from the subscription list above — do not write generic advice.
+
+Use this format exactly:
+Week 1 — Cancel
+Day 1 — [Tool name]: Log in, go to Settings then Billing, click Cancel Subscription. Before cancelling, export your data via Settings then Data Export. This removes £X/month immediately.
+Day 2 — [Tool name]: Log in, go to Account then Subscription, select Downgrade or Cancel. If a free tier exists, downgrade rather than cancel to retain your data.
+Day 3 — [Tool name]: Contact support via their in-app chat or support email to request cancellation — this tool does not allow self-serve cancellation.
+Day 4 — Check your bank or card statement online. Confirm each cancellation from this week has stopped charging. Flag any that are still active and contact support.
+Day 5 — Rest day. No action needed.
+
+Week 2 — Migrate
+Day 1 — Sign up for [replacement tool] on their free or lowest paid tier. Import your data using their import tool, usually found under Settings then Import or Data then Import CSV.
+Day 2 — Run [old tool] and [replacement tool] in parallel for three days before switching fully. This ensures nothing is lost in the migration.
+Day 3 — Move your active work into [replacement tool]. Notify any team members of the change.
+Day 4 — Confirm [old tool] is no longer needed. Cancel it now if you have not already done so.
+Day 5 — Log the saving in your records: old cost was £X/month, new cost is £Y/month.
+
+Week 3 — Consolidate
+Day 1 — [Overlapping tool A] and [Overlapping tool B] do the same job. Pick [Tool A] to keep because [specific reason]. Log into [Tool B] and export any data you need.
+Day 2 — Cancel [Tool B]. Go to Settings then Billing then Cancel.
+Day 3 — Move any remaining workflows from [Tool B] into [Tool A].
+Day 4 — Test that everything in [Tool A] is working correctly before considering [Tool B] fully replaced.
+Day 5 — Review your updated stack. Confirm all planned cancellations from Weeks 1 to 3 are complete.
+
+Week 4 — Lock In
+Day 1 — Log into your bank or card provider and review all recurring charges. Cross-reference against your updated subscription list. Cancel anything still showing that should have been removed.
+Day 2 — Calculate your new monthly total and compare it to your starting spend of £${totalMonthly}. Record the saving.
+Day 3 — Set a calendar reminder for 90 days from today to review your stack again. Subscriptions creep back silently.
+Day 4 — Done. Your stack is leaner. Keep the reminder.
+
+Only include days that have real actions based on the tools in this specific subscription list. Do not pad with generic advice. Do not mention subscription tracking or auditing tools.
 
 Be precise. Use the exact monthly total provided. No waffle. No emoji. No markdown.
 IMPORTANT RULES:
